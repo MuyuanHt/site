@@ -70,7 +70,7 @@ func InitJwt() (*JwtWrapper, error) {
 	if err != nil {
 		return nil, err
 	}
-	hours, err := conf.GetConfigParam("expirationHours")
+	hours, err := conf.GetConfigParam("jwtExpirationHours")
 	if err != nil {
 		return nil, err
 	}

@@ -5,4 +5,4 @@
 jwtGrantScope: read_user_info # 授予范围
 jwtIssuer: Auth_Server # 颁发者
 jwtAudience: web#app # 授予对象
-expirationHours: 720 # 有效时间 30天
+jwtExpirationHours: 720 # 有效时间 30天
