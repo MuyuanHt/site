@@ -1,0 +1,73 @@
+# 此文件内容同步于 app.yaml 用于上传 github
+# 拉取项目后 启动程序前 将此文件名称修改为 app.yaml
+# 修改此文件相关配置 读取路径使用常量定义在 app.go
+
+# 此文件为各个服务的配置信息
+services:
+  gate:
+    name: api-gateway
+    host: localhost
+    port: 8088
+
+  user:
+    name: user-service
+    host: localhost
+    port: 50011
+    mysql:
+      user: root
+      password: 111
+      host: localhost
+      port: 3306
+      dbname: site_user_svs
+
+  chat:
+    name: chat-service
+    host: localhost
+    port: 50031
+    mysql:
+      user: root
+      password: 111
+      host: localhost
+      port: 3306
+      dbname: site_chat_svs
+
+  auth:
+    name: auth-service
+    host: localhost
+    port: 50021
+
+  document:
+    name: document-service
+    host: localhost
+    port: 50061
+    mysql:
+      user: root
+      password: 111
+      host: localhost
+      port: 3306
+      dbname: site_document_svs
+
+  team:
+    name: collaborate-service
+    host: localhost
+    port: 50041
+    mysql:
+      user: root
+      password: 111
+      host: localhost
+      port: 3306
+      dbname: site_team_svs
+
+  calendar:
+    name: calendar-service
+    host: localhost
+    port: 50051
+    mysql:
+      user: root
+      password: 111
+      host: localhost
+      port: 3306
+      dbname: site_calendar_svs
+
+
+

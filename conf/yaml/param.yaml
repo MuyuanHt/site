@@ -1,0 +1,8 @@
+# 某些参数配置信息 加载后以 map 形式存在于内存中
+# 多个参数使用 # 分割
+
+# JWT
+jwtGrantScope: read_user_info # 授予范围
+jwtIssuer: Auth_Server # 颁发者
+jwtAudience: web#app # 授予对象
+expirationHours: 720 # 有效时间 30天

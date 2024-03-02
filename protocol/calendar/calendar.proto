@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package calendar;
+
+option go_package = "./protocol/calendar";

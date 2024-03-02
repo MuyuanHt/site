@@ -1,0 +1,5 @@
+syntax = "proto3";
+
+package collaborate;
+
+option go_package = "./protocol/collaborate";

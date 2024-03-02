@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "./protocol/user";
+
+service UserService{
+  // 查询单个用户
+  rpc FindOneUser(FindOneUserReq) returns (FindOneUserResp) {}
+  // 查询单个账户
+  rpc FindAccount(FindAccountReq) returns (FindAccountResp){}
+  // 新增用户
+  rpc CreateUser(CreateUserReq) returns (CreateUserResp){}
+}
+
+// 用户信息 用于展示
+message UserData{
+  int64 uid = 1;
+  string phone = 2;
+  string email = 3;
+  string username = 4;
+  int32 age = 5;
+  int32 gender = 6;
+  // 地区
+  string region = 7;
+  // 头像
+  string icon = 8;
+  // 描述
+  string description = 9;
+  // 生日用时间戳
+  int64 birthday = 10;
+}
+
+// 查询单个用户
+message FindOneUserReq{
+  int64 uid = 1;
+  // 账号类别 phone 或 email 等
+  int32 accountType = 2;
+  string account = 3;
+}
+
+message FindOneUserResp{
+  int32 status = 1;
+  string error = 2;
+  UserData data = 3;
+}
+
+// 账户信息 登陆注册用
+message AccountData{
+  string phone = 1;
+  string email = 2;
+  string password = 3;
+  int64 id = 4;
+}
+
+message FindAccountReq{
+  int32 accountType = 1;
+  string account = 2;
+}
+
+message FindAccountResp{
+  int32 status = 1;
+  string error = 2;
+  AccountData data = 3;
+}
+
+// 新增用户或修改用户信息
+message CreateUserReq{
+  int32 accountType = 1;
+  string account = 2;
+  string password = 3;
+}
+
+message CreateUserResp{
+  int32 status = 1;
+  string error = 2;
+  UserData data = 3;
+}
+
+// 修改个人信息
+message ChangeUserReq{
+  UserData userData = 1;
+}
+
+message ChangeUserResp{
+  int32 status = 1;
+  string error = 2;
+  UserData userData = 3;
+}

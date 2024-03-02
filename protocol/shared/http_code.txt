@@ -1,0 +1,54 @@
+# 该文件用于生成返回前端的自定义 http 响应码 使用 http_err.sh 生成 http_error_type.go 文件
+# 使用 # 进行注释
+# 使用 "错误码-错误变量-错误信息" 进行定义 不要包含其他符号
+# 错误码包含五位
+# 第1位表示服务级别 可自主增加
+# 1 系统错误 表示整个系统的错误 如数据库连接失败 服务器内部错误等
+# 2 普通错误 表示用户的非法操作
+
+# 第23位表示服务模块级别 可自主增加
+# 01 gateway
+# 02 user
+# 03 chat
+# 04 auth
+# 05 document
+# 06 collaborate
+# 07 calender
+
+# 第45位表示具体错误码
+
+# 以下为文件正式内容
+# =================================================================
+
+# 网关相关
+# 不要删除与修改 10101
+10101-CodeNotFound-状态码异常
+10102-ParseParamError-参数解析失败
+
+# 用户相关
+10201-UserNotFound-用户不存在
+10202-UserExists-用户已存在
+10203-PasswordError-密码错误
+10204-UserOrPasswordError-用户名或密码有误
+10205-CreateUidError-生成用户序列号失败
+
+# 账号相关
+10401-AccountInvalid-账号无效
+10402-AccountTypeInvalid-账号类型无效
+10403-UnAuthorizedError-账号未授权
+
+# 令牌相关
+10411-GenerateTokenError-生成令牌失败
+10412-TokenParsingError-令牌解析失败
+10413-TokenExpiration-令牌已过期
+10414-TokenInvalid-令牌无效
+10415-ParseKeyError-解析密钥失败
+
+# 其他错误
+10451-TimeInvalid-时间无效
+10452-ConfNotFound-无配置信息
+
+
+
+
+# 将这行放在最后一行 并且不要删除这行

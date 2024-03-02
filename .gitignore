@@ -1,0 +1,22 @@
+# IDE
+.idea/
+.vscode/
+
+# 编译信息
+build/
+
+# 应用程序与插件
+*.exe
+*.exe~
+
+# 忽略此文件而上传 app_upload.yaml
+app.yaml
+
+# 其他
+vendor/
+
+*.log
+*.out
+*.test
+
+go.sum
