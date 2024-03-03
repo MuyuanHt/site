@@ -1,6 +1,6 @@
 package shared
 
-// This file use shell "http_code.sh" auto created
+// This file use shell http_code.sh auto created
 const (
 	CodeNotFound        = 10101 // 状态码异常
 	ParseParamError     = 10102 // 参数解析失败

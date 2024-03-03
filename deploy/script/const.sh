@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2129
 
 # 删除旧的 const_type.go 存在则删除
 cd ../../protocol/shared || exit
@@ -12,11 +13,13 @@ fi
 :> "const_type.txt"
 
 # 头部
-# shellcheck disable=SC2129
 {
-  echo "package shared"
-  echo "// This file use shell \"const.sh\" auto created"
-  echo "const ("
+  cat <<EOF
+  package shared
+
+  // This file use shell const.sh auto created
+  const (
+EOF
 } >> const_type.txt
 
 # 主体部分 逐行读取文件内容并处理

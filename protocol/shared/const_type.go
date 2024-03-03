@@ -1,6 +1,6 @@
 package shared
 
-// This file use shell "const.sh" auto created
+// This file use shell const.sh auto created
 const (
 	AccountTypeUid   = 0 // 用户序列号
 	AccountTypePhone = 1 // 手机号

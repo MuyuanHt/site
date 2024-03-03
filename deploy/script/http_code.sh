@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2129
 
 # 删除旧的 http_code_type.go 存在则删除
 cd ../../protocol/shared || exit
@@ -7,14 +8,17 @@ if [ -f "http_code_type.go" ]; then
   echo "deleted file successfully"
 fi
 
+echo "The file is being regenerated and may take some time."
 :> "http_code_type.txt"
 
 # 头部
-# shellcheck disable=SC2129
 {
-  echo "package shared"
-  echo "// This file use shell \"http_code.sh\" auto created"
-  echo "const ("
+  cat <<EOF
+  package shared
+
+  // This file use shell http_code.sh auto created
+  const (
+EOF
 } >> http_code_type.txt
 
 # 主体部分 逐行读取文件内容并处理
@@ -33,11 +37,11 @@ while IFS= read -r line; do
   echo "$defines = $numbers // $comment"  # 将处理后的内容输出
 done < http_code.txt >> http_code_type.txt  # 将处理后的内容添加到 http_code_type.txt
 
-# 中间
 {
-  echo ")"
-  echo
-  echo "var resultCodeText = map[int]string{"
+  cat <<EOF
+  )
+  var resultCodeText = map[int]string{
+EOF
 } >> http_code_type.txt
 
 while IFS= read -r line; do
@@ -55,20 +59,27 @@ while IFS= read -r line; do
   echo "$defines:\"$comment\","  # 将处理后的内容输出
 done < http_code.txt >> http_code_type.txt  # 将处理后的内容添加到 http_code_type.txt
 
+
 # 末尾
 {
-  echo "}"
-  echo
-  echo "// CodeMessage 获取 code 对应的 message"
-  echo "func CodeMessage(code int) (string, bool) {"
-  echo "message, ok := resultCodeText[code]"
-  echo "return message, ok }"
+  cat <<EOF
+  }
 
-  echo "// CodeMessageIgnoreCode 获取 code 对应的 message 未查询到状态码时返回指定的状态码异常错误"
-  echo "func CodeMessageIgnoreCode(code int) string {"
-  echo "message, ok := resultCodeText[code]"
-  echo "if !ok { return resultCodeText[CodeNotFound] }" # 状态码异常 10101
-  echo "return message}"
+  // CodeMessage 获取 code 对应的 message
+  func CodeMessage(code int) (string, bool) {
+    message, ok := resultCodeText[code]
+    return message, ok
+  }
+
+  // CodeMessageIgnoreCode 获取 code 对应的 message 未查询到状态码时返回指定的状态码异常错误
+  func CodeMessageIgnoreCode(code int) string {
+    message, ok := resultCodeText[code]
+    if !ok {
+      return resultCodeText[CodeNotFound]
+    }
+    return message
+  }
+EOF
 } >> http_code_type.txt
 
 echo "write http_code_type.txt successfully"
