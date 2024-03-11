@@ -20,13 +20,19 @@ func (s *AuthService) Register(account string, password string) error {
 	if accountType == 0 {
 		return errors.New(shared.CodeMessageIgnoreCode(shared.AccountTypeInvalid))
 	}
-	encryptPwd, err := utils.HashPassword(password)
+	if !tools.CheckPwdRegexp(password) {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.PasswordInvalid))
+	}
+	encryptPwd, err := tools.HashPassword(password)
+	if err != nil {
+		return err
+	}
 	resp, err := s.UserSvc.CreateUser(accountType, account, encryptPwd)
 	if err != nil {
 		return err
 	}
-	if resp.Error != "" || resp.Status != 200 {
-		return errors.New(resp.Error)
+	if resp.Msg.Error != "" || resp.Msg.Status != 200 {
+		return errors.New(resp.Msg.Error)
 	}
 	return nil
 }
@@ -42,12 +48,12 @@ func (s *AuthService) Login(account string, password string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	if resp.Error != "" || resp.Status != 200 {
-		return "", errors.New(resp.Error)
+	if resp.Msg.Error != "" || resp.Msg.Status != 200 {
+		return "", errors.New(resp.Msg.Error)
 	}
 
 	hashPwd := resp.Data.Password
-	if !utils.CheckHashPassword(hashPwd, password) {
+	if !tools.CheckHashPassword(hashPwd, password) {
 		return "", errors.New(shared.CodeMessageIgnoreCode(shared.UserOrPasswordError))
 	}
 
@@ -70,8 +76,8 @@ func (s *AuthService) Validate(token string) (int64, error) {
 	if err != nil {
 		return -1, err
 	}
-	if resp.Error != "" || resp.Status != 200 {
-		return -1, errors.New(resp.Error)
+	if resp.Msg.Error != "" || resp.Msg.Status != 200 {
+		return -1, errors.New(resp.Msg.Error)
 	}
 
 	return claims.UserId, nil

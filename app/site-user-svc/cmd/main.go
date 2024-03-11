@@ -19,6 +19,10 @@ func main() {
 	}
 
 	c := allConf.GetServiceConf("user")
+	err = conf.LoadParamConf()
+	if err != nil {
+		panic(err)
+	}
 	dsn := c.Mysql.GetMysqlDsn()
 	d, err := dao.InitDao(dsn)
 	if err != nil {

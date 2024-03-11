@@ -3,6 +3,7 @@ package tools
 import (
 	"os"
 	"path"
+	"reflect"
 	"regexp"
 	consts "site/protocol/shared"
 	"strings"
@@ -36,4 +37,22 @@ func GetAccountType(account string) int32 {
 		return consts.AccountTypeEmail
 	}
 	return -1
+}
+
+// IsZeroValue 判断是否是类型零值 零值时返回 true
+func IsZeroValue(input interface{}) bool {
+	v := reflect.ValueOf(input)
+	zeroVal := reflect.Zero(v.Type()).Interface()
+	return reflect.DeepEqual(v.Interface(), zeroVal)
+}
+
+// CheckPwdRegexp 校验密码格式 6-16 位且同时包含数字与字母
+func CheckPwdRegexp(password string) bool {
+	if len(password) < 6 || len(password) > 16 {
+		return false
+	}
+	// 检查是否包含数字和字母
+	hasNumber := regexp.MustCompile(`[0-9]`).MatchString(password)
+	hasLetter := regexp.MustCompile(`[a-zA-Z]`).MatchString(password)
+	return hasNumber && hasLetter
 }

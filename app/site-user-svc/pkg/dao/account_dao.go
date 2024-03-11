@@ -52,9 +52,9 @@ func (d *Dao) FindOneAccountByEmail(email string) (*models.Account, error) {
 	return &a, nil
 }
 
-// UpdatePasswordById 修改密码
-func (d *Dao) UpdatePasswordById(id int64, password string) error {
-	a, err := d.FindOneAccountById(id)
+// UpdatePasswordByUid 修改密码
+func (d *Dao) UpdatePasswordByUid(uid int64, password string) error {
+	a, err := d.FindOneAccountByUid(uid)
 	if err != nil {
 		return err
 	}
@@ -138,4 +138,26 @@ func (d *Dao) FindOneUserByAccount(accountType int, account string) (*models.Acc
 	}
 	a.UserInfo = *info
 	return a, nil
+}
+
+// FindOneUserByUid 通过 Uid 查询用户信息
+func (d *Dao) FindOneUserByUid(uid int64) (*models.Account, error) {
+	a, err := d.FindOneAccountByUid(uid)
+	if err != nil {
+		return nil, err
+	}
+	var info *models.UserInfo
+	info, err = d.FindUserInfoById(int64(a.UserId))
+	if err != nil {
+		return nil, err
+	}
+	a.UserInfo = *info
+	return a, nil
+}
+
+// FindUsersLikePhone 通过手机模糊查询用户信息
+func (d *Dao) FindUsersLikePhone(paramPhone string) ([]*models.Account, error) {
+	ret := make([]*models.Account, 0)
+
+	return ret, nil
 }

@@ -29,3 +29,8 @@ func CompareInt32Int(a int32, b int) bool {
 	}
 	return true
 }
+
+// FormatBirthdayTime 格式化生日时间 只取年月日部分
+func FormatBirthdayTime(t time.Time) time.Time {
+	return time.Date(t.Year(), t.Month(), t.Day(), 0, 0, 0, 0, time.UTC)
+}

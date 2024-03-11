@@ -46,7 +46,7 @@ func (c *MiddlewareConfig) AuthRequired(ctx *gin.Context) {
 	res, err := c.svc.Client.Validate(context.Background(), &pb.ValidateReq{
 		Token: token[1],
 	})
-	if err != nil || res.Status != http.StatusOK {
+	if err != nil || res.Msg.Status != http.StatusOK {
 		ctx.AbortWithStatusJSON(
 			http.StatusUnauthorized,
 			middleware.NewErrResult(http.StatusUnauthorized, shared.UnAuthorizedError),

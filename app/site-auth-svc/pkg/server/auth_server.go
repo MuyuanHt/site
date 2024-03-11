@@ -20,12 +20,16 @@ func (s *AuthServer) Register(ctx context.Context, req *auth.RegisterReq) (*auth
 	err := s.Svc.Register(req.Account, req.Password)
 	if err != nil {
 		return &auth.RegisterResp{
-			Status: http.StatusConflict,
-			Error:  err.Error(),
+			Msg: &auth.RetMsg{
+				Status: http.StatusConflict,
+				Error:  err.Error(),
+			},
 		}, nil
 	}
 	return &auth.RegisterResp{
-		Status:  http.StatusOK,
+		Msg: &auth.RetMsg{
+			Status: http.StatusOK,
+		},
 		Account: req.Account,
 	}, nil
 }
@@ -35,14 +39,18 @@ func (s *AuthServer) Login(ctx context.Context, req *auth.LoginReq) (*auth.Login
 	token, err := s.Svc.Login(req.Account, req.Password)
 	if err != nil {
 		return &auth.LoginResp{
-			Status: http.StatusUnauthorized,
-			Error:  err.Error(),
+			Msg: &auth.RetMsg{
+				Status: http.StatusUnauthorized,
+				Error:  err.Error(),
+			},
 		}, nil
 	}
 
 	return &auth.LoginResp{
-		Status: http.StatusOK,
-		Token:  token,
+		Msg: &auth.RetMsg{
+			Status: http.StatusOK,
+		},
+		Token: token,
 	}, nil
 }
 
@@ -51,13 +59,17 @@ func (s *AuthServer) Validate(ctx context.Context, req *auth.ValidateReq) (*auth
 	uid, err := s.Svc.Validate(req.Token)
 	if err != nil {
 		return &auth.ValidateResp{
-			Status: http.StatusUnauthorized,
-			Error:  shared.CodeMessageIgnoreCode(shared.TokenInvalid),
+			Msg: &auth.RetMsg{
+				Status: http.StatusUnauthorized,
+				Error:  shared.CodeMessageIgnoreCode(shared.TokenInvalid),
+			},
 		}, nil
 	}
 
 	return &auth.ValidateResp{
-		Status: http.StatusOK,
-		Uid:    uid,
+		Msg: &auth.RetMsg{
+			Status: http.StatusOK,
+		},
+		Uid: uid,
 	}, nil
 }

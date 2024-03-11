@@ -6,3 +6,10 @@ jwtGrantScope: read_user_info # 授予范围
 jwtIssuer: Auth_Server # 颁发者
 jwtAudience: web#app # 授予对象
 jwtExpirationHours: 720 # 有效时间 30天
+
+# Select
+queryMaxNumber: 100 # 单次查询最大数量限制
+
+# Default user value
+defaultIconUrl: "https://xxx.xxx.xxx.xxx" # 默认头像
+defaultDescription: "No description yet." # 默认描述

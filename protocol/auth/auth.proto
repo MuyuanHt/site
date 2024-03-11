@@ -11,6 +11,12 @@ service AuthService {
   rpc Validate(ValidateReq) returns(ValidateResp){}
 }
 
+// 返回的错误信息
+message RetMsg{
+  int32 status = 1;
+  string error = 2;
+}
+
 // Register
 message RegisterReq {
   string account = 1;
@@ -18,9 +24,8 @@ message RegisterReq {
 }
 
 message RegisterResp{
-  int32 status = 1;
-  string error = 2;
-  string account = 3;
+  RetMsg msg = 1;
+  string account = 2;
 }
 
 // Login
@@ -30,9 +35,8 @@ message LoginReq{
 }
 
 message LoginResp{
-  int32 status = 1;
-  string error = 2;
-  string token = 3;
+  RetMsg msg = 1;
+  string token = 2;
 }
 
 // Validate
@@ -41,7 +45,6 @@ message ValidateReq{
 }
 
 message ValidateResp{
-  int32 status = 1;
-  string error = 2;
-  int64 uid = 3;
+  RetMsg msg = 1;
+  int64 uid = 2;
 }

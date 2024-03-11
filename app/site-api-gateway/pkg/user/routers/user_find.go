@@ -16,20 +16,24 @@ import (
 func FindOneUser(ctx *gin.Context, c pb.UserServiceClient) {
 	body := api.FindOneUserReqBody{}
 	if err := ctx.BindJSON(&body); err != nil {
-		_ = ctx.AbortWithError(http.StatusBadRequest, err)
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParseParamError))
 		return
 	}
 	at, err := strconv.ParseInt(body.AccountType, 10, 64)
 	if err != nil {
-		_ = ctx.AbortWithError(http.StatusBadRequest, err)
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParseParamError))
 		return
 	}
 	res, err := c.FindOneUser(context.Background(), &pb.FindOneUserReq{
 		AccountType: int32(at),
 		Account:     body.Account,
 	})
-	if !tools.CompareInt32Int(res.Status, http.StatusOK) {
-		middleware.CheckStatusCode(ctx, int(res.Status), res.Error, res.Data)
+	if err != nil {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ServerError))
+		return
+	}
+	if !tools.CompareInt32Int(res.Msg.Status, http.StatusOK) {
+		middleware.CheckStatusCode(ctx, int(res.Msg.Status), res.Msg.Error, nil)
 		return
 	}
 	if res.Data == nil {
@@ -37,7 +41,7 @@ func FindOneUser(ctx *gin.Context, c pb.UserServiceClient) {
 		return
 	}
 	data := api.FindOneUserRespBody{
-		Uid:         res.Data.Uid,
+		Uid:         strconv.FormatInt(res.Data.Uid, 10),
 		Phone:       res.Data.Phone,
 		Email:       res.Data.Email,
 		Username:    res.Data.Username,

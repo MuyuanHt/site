@@ -24,6 +24,7 @@
 # 不要删除与修改 10101
 10101-CodeNotFound-状态码异常
 10102-ParseParamError-参数解析失败
+10103-ServerError-服务器内部出错
 
 # 用户相关
 10201-UserNotFound-用户不存在
@@ -31,11 +32,18 @@
 10203-PasswordError-密码错误
 10204-UserOrPasswordError-用户名或密码有误
 10205-CreateUidError-生成用户序列号失败
+10206-OldPasswordError-原始密码有误
+10207-InputsInconsistent-两次输入不一致
+10208-UpdatePasswordError-修改密码失败
+10209-UpdateUserInfoError-修改用户信息失败
+10210-CreateUserError-创建用户失败
+10211-OldPwdSameAsNewPwd-新密码与原始密码相同
 
 # 账号相关
 10401-AccountInvalid-账号无效
 10402-AccountTypeInvalid-账号类型无效
 10403-UnAuthorizedError-账号未授权
+10404-PasswordInvalid-密码不合法，请输入6~16位且至少包含数字与字母
 
 # 令牌相关
 10411-GenerateTokenError-生成令牌失败
@@ -47,6 +55,7 @@
 # 其他错误
 10451-TimeInvalid-时间无效
 10452-ConfNotFound-无配置信息
+10453-HashPwdError-生成密码失败
 
 
 

@@ -31,6 +31,7 @@ func NewResultOk(c *gin.Context, r *Result) {
 // NewResultError 创建错误返回信息
 func NewResultError(c *gin.Context, r *Result) {
 	c.JSON(r.Code, r)
+	c.Abort()
 }
 
 // Ok 成功 无返回

@@ -8,9 +8,46 @@ type FindOneUserReqBody struct {
 }
 
 type FindOneUserRespBody struct {
-	Uid         int64  `json:"uid"`
+	Uid         string `json:"uid"`
 	Phone       string `json:"phone"`
 	Email       string `json:"email"`
+	Username    string `json:"username"`
+	Age         int32  `json:"age"`
+	Gender      int32  `json:"gender"`
+	Region      string `json:"region"`
+	Icon        string `json:"icon"`
+	Description string `json:"description"`
+	Birthday    int64  `json:"birthday"`
+}
+
+// 修改用户密码 =================================================================
+
+type UpdatePasswordReqBody struct {
+	Uid         string `json:"uid"`
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
+}
+
+type UpdatePasswordRespBody struct {
+	Uid     string `json:"uid"`
+	Success bool   `json:"success"`
+}
+
+// 修改个人信息 =================================================================
+
+type UpdateUserInfoReqBody struct {
+	Uid         string `json:"uid"`
+	Username    string `json:"username"`
+	Age         int32  `json:"age"`
+	Gender      int32  `json:"gender"`
+	Region      string `json:"region"`
+	Icon        string `json:"icon"`
+	Description string `json:"description"`
+	Birthday    int64  `json:"birthday"`
+}
+
+type UpdateUserInfoRespBody struct {
+	Uid         string `json:"uid"`
 	Username    string `json:"username"`
 	Age         int32  `json:"age"`
 	Gender      int32  `json:"gender"`

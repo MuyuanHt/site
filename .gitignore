@@ -9,7 +9,9 @@ build/
 *.exe
 *.exe~
 
+# 上传时忽略的配置文件
 # 忽略此文件而上传 app_upload.yaml
+/key
 app.yaml
 
 # 其他
