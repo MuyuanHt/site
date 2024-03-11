@@ -86,3 +86,42 @@ func TestAccountDao_UnsubscribeById(t *testing.T) {
 		t.Errorf("unsubscribe failed: %v", err)
 	}
 }
+
+func TestAccountDao_FindUsersLikePhone(t *testing.T) {
+	d := initTestDao()
+	param := "848"
+	accounts, err := d.FindUsersLikePhone(param)
+	if err != nil {
+		t.Errorf("find users err: %v", err)
+	}
+	t.Logf("len %v", len(accounts))
+	for _, v := range accounts {
+		t.Logf("phone: %v, name: %v", v.Phone, v.Username)
+	}
+}
+
+func TestAccountDao_FindUsersLikeEmail(t *testing.T) {
+	d := initTestDao()
+	param := "bc"
+	accounts, err := d.FindUsersLikeEmail(param)
+	if err != nil {
+		t.Errorf("find users err: %v", err)
+	}
+	t.Logf("len %v", len(accounts))
+	for _, v := range accounts {
+		t.Logf("phone: %v, name: %v", v.Email, v.Username)
+	}
+}
+
+func TestAccountDao_FindUsersLikeName(t *testing.T) {
+	d := initTestDao()
+	param := "u"
+	accounts, err := d.FindUsersLikeName(param)
+	if err != nil {
+		t.Errorf("find users err: %v", err)
+	}
+	t.Logf("len %v", len(accounts))
+	for _, v := range accounts {
+		t.Logf("phone: %v, name: %v", v.Phone, v.Username)
+	}
+}

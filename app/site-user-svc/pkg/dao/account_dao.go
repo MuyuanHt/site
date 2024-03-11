@@ -2,6 +2,7 @@ package dao
 
 import (
 	"errors"
+	"fmt"
 	"site/app/site-user-svc/pkg/models"
 	"site/protocol/shared"
 	"strconv"
@@ -46,6 +47,16 @@ func (d *Dao) FindOneAccountByPhone(phone string) (*models.Account, error) {
 func (d *Dao) FindOneAccountByEmail(email string) (*models.Account, error) {
 	var a models.Account
 	result := d.DB.Where(&models.Account{Email: email}).First(&a)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &a, nil
+}
+
+// FindOneAccountByUserId 通过关联 userinfo 表的外键 userId 查询账户信息 两表之间是 1:1 关联的
+func (d *Dao) FindOneAccountByUserId(userId uint) (*models.Account, error) {
+	var a models.Account
+	result := d.DB.Where(&models.Account{UserId: userId}).First(&a)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -155,9 +166,71 @@ func (d *Dao) FindOneUserByUid(uid int64) (*models.Account, error) {
 	return a, nil
 }
 
-// FindUsersLikePhone 通过手机模糊查询用户信息
-func (d *Dao) FindUsersLikePhone(paramPhone string) ([]*models.Account, error) {
-	ret := make([]*models.Account, 0)
+// TODO: 批量查询后期控制单次查询数量上限
 
-	return ret, nil
+// FindUsersLikePhone 通过手机模糊查询用户信息
+func (d *Dao) FindUsersLikePhone(paramPhone string) ([]*models.IgnoreAccount, error) {
+	accounts := make([]*models.Account, 0)
+	d.DB.Model(&models.Account{}).Where("phone Like ?", fmt.Sprintf("%%%v%%", paramPhone)).Find(&accounts)
+	retAccounts := make([]*models.IgnoreAccount, 0, len(accounts))
+	var info *models.UserInfo
+	var err error
+	for _, account := range accounts {
+		info, err = d.FindUserInfoById(int64(account.UserId))
+		if err != nil {
+			continue
+		}
+		retAccounts = append(retAccounts, &models.IgnoreAccount{
+			Phone:    account.Phone,
+			Email:    account.Email,
+			Username: info.Username,
+			Icon:     info.Icon,
+		})
+	}
+	return retAccounts, nil
+}
+
+// FindUsersLikeEmail 通过邮箱模糊查询用户信息
+func (d *Dao) FindUsersLikeEmail(paramEmail string) ([]*models.IgnoreAccount, error) {
+	accounts := make([]*models.Account, 0)
+	d.DB.Model(&models.Account{}).Where("email Like ?", fmt.Sprintf("%%%v%%", paramEmail)).Find(&accounts)
+	retAccounts := make([]*models.IgnoreAccount, 0, len(accounts))
+	var info *models.UserInfo
+	var err error
+	for _, account := range accounts {
+		info, err = d.FindUserInfoById(int64(account.UserId))
+		if err != nil {
+			continue
+		}
+		retAccounts = append(retAccounts, &models.IgnoreAccount{
+			Phone:    account.Phone,
+			Email:    account.Email,
+			Username: info.Username,
+			Icon:     info.Icon,
+		})
+	}
+	return retAccounts, nil
+}
+
+// FindUsersLikeName 通过用户名模糊查询用户信息
+func (d *Dao) FindUsersLikeName(paramName string) ([]*models.IgnoreAccount, error) {
+	infos, err := d.FindUserInfosLikeName(paramName)
+	if err != nil {
+		return nil, err
+	}
+	var account *models.Account
+	retAccounts := make([]*models.IgnoreAccount, 0, len(infos))
+	for _, info := range infos {
+		account, err = d.FindOneAccountByUserId(info.ID)
+		if err != nil {
+			continue
+		}
+		retAccounts = append(retAccounts, &models.IgnoreAccount{
+			Phone:    account.Phone,
+			Email:    account.Email,
+			Username: info.Username,
+			Icon:     info.Icon,
+		})
+	}
+	return retAccounts, nil
 }

@@ -177,3 +177,31 @@ func (s *UserServer) UpdateUserInfo(ctx context.Context, req *user.ChangeUserInf
 		},
 	}, nil
 }
+
+// FuzzyQueryUsers 模糊查询用户信息
+func (s *UserServer) FuzzyQueryUsers(ctx context.Context, req *user.FuzzyQueryUsersReq) (*user.FuzzyQueryUsersResp, error) {
+	accounts, err := s.Svc.FuzzyQueryUsers(req.Param)
+	if err != nil {
+		return &user.FuzzyQueryUsersResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusNotFound,
+				Error:  shared.CodeMessageIgnoreCode(shared.FuzzyQueryError),
+			},
+		}, nil
+	}
+	data := make([]*user.IgnoreUserData, 0, len(accounts))
+	for _, ac := range accounts {
+		data = append(data, &user.IgnoreUserData{
+			Phone:    ac.Phone,
+			Email:    ac.Email,
+			Username: ac.Username,
+			Icon:     ac.Icon,
+		})
+	}
+	return &user.FuzzyQueryUsersResp{
+		Msg: &user.RetMsg{
+			Status: http.StatusOK,
+		},
+		Data: data,
+	}, nil
+}

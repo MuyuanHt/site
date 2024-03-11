@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"site/app/site-user-svc/pkg/models"
 )
 
@@ -35,4 +36,18 @@ func (d *Dao) UpdateUserInfo(id int64, user *models.UserInfo) error {
 	result.LastLoginTime = user.LastLoginTime
 	d.DB.Save(result)
 	return nil
+}
+
+// FindUserInfosLikeName 通过用户名模糊查询对应 id
+func (d *Dao) FindUserInfosLikeName(paramName string) ([]*models.IgnoreUserInfo, error) {
+	infos := make([]*models.UserInfo, 0)
+	d.DB.Model(&models.UserInfo{}).Where("username Like ?", fmt.Sprintf("%%%v%%", paramName)).Find(&infos)
+	retInfos := make([]*models.IgnoreUserInfo, 0, len(infos))
+	for _, v := range infos {
+		retInfos = append(retInfos, &models.IgnoreUserInfo{
+			ID:       v.ID,
+			Username: v.Username,
+		})
+	}
+	return retInfos, nil
 }

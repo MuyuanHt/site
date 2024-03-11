@@ -56,3 +56,20 @@ type UpdateUserInfoRespBody struct {
 	Description string `json:"description"`
 	Birthday    int64  `json:"birthday"`
 }
+
+// 批量查询用户信息
+
+type FuzzyQueryUsersData struct {
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Icon     string `json:"icon"`
+}
+
+type FuzzyQueryUsersReqBody struct {
+	Param string `json:"param"`
+}
+
+type FuzzyQueryUsersRespBody struct {
+	Data []*FuzzyQueryUsersData `json:"data"`
+}

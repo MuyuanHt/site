@@ -54,3 +54,40 @@ func FindOneUser(ctx *gin.Context, c pb.UserServiceClient) {
 	}
 	middleware.OkWithData(ctx, data)
 }
+
+// FuzzyQueryUsers 批量查询用户信息的路由函数
+func FuzzyQueryUsers(ctx *gin.Context, c pb.UserServiceClient) {
+	body := api.FuzzyQueryUsersReqBody{}
+	if err := ctx.BindJSON(&body); err != nil {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParseParamError))
+		return
+	}
+	res, err := c.FuzzyQueryUsers(ctx, &pb.FuzzyQueryUsersReq{
+		Param: body.Param,
+	})
+	if err != nil {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ServerError))
+		return
+	}
+	if !tools.CompareInt32Int(res.Msg.Status, http.StatusOK) {
+		middleware.CheckStatusCode(ctx, int(res.Msg.Status), res.Msg.Error, nil)
+		return
+	}
+	if res.Data == nil {
+		middleware.FailWithMsg(ctx, shared.UserNotFound)
+		return
+	}
+	users := make([]*api.FuzzyQueryUsersData, 0, len(res.Data))
+	for _, v := range res.Data {
+		users = append(users, &api.FuzzyQueryUsersData{
+			Phone:    v.Phone,
+			Email:    v.Email,
+			Username: v.Username,
+			Icon:     v.Icon,
+		})
+	}
+	data := api.FuzzyQueryUsersRespBody{
+		Data: users,
+	}
+	middleware.OkWithData(ctx, data)
+}

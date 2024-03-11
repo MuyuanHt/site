@@ -148,3 +148,39 @@ func (s *UserService) UpdateUserInfo(uid int64, info *models.UserInfo) (*models.
 	}
 	return resAccount, nil
 }
+
+// mergeIgnoreAccounts 合并多个 IgnoreAccounts
+func mergeIgnoreAccounts(accounts1 []*models.IgnoreAccount, accounts2 []*models.IgnoreAccount) []*models.IgnoreAccount {
+	accounts := make([]*models.IgnoreAccount, 0, len(accounts1)+len(accounts2))
+	tmpMap := make(map[string]*models.IgnoreAccount, 0)
+	for _, v1 := range accounts1 {
+		tmpMap[v1.Phone] = v1
+	}
+	for _, v2 := range accounts2 {
+		tmpMap[v2.Phone] = v2
+	}
+	for _, v := range tmpMap {
+		accounts = append(accounts, v)
+	}
+	return accounts
+}
+
+// FuzzyQueryUsers 模糊查询用户信息
+func (s *UserService) FuzzyQueryUsers(param string) ([]*models.IgnoreAccount, error) {
+	var accounts []*models.IgnoreAccount
+	usersByPhone, err := s.D.FindUsersLikePhone(param)
+	if err != nil {
+		return nil, err
+	}
+	usersByEmail, err := s.D.FindUsersLikeEmail(param)
+	if err != nil {
+		return usersByPhone, nil
+	}
+	accounts = mergeIgnoreAccounts(usersByPhone, usersByEmail)
+	usersByName, err := s.D.FindUsersLikeName(param)
+	if err != nil {
+		return accounts, nil
+	}
+	accounts = mergeIgnoreAccounts(accounts, usersByName)
+	return accounts, nil
+}

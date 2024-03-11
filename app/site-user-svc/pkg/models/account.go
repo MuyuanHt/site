@@ -12,3 +12,11 @@ type Account struct {
 	Email    string   `json:"email"`              // 邮箱
 	UserInfo UserInfo `gorm:"foreignKey:user_id"` // 关联用户信息表
 }
+
+// IgnoreAccount 用于批量查询时只返回关键信息
+type IgnoreAccount struct {
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+	Username string `json:"username"`
+	Icon     string `json:"icon"`
+}

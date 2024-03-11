@@ -38,6 +38,7 @@
 10209-UpdateUserInfoError-修改用户信息失败
 10210-CreateUserError-创建用户失败
 10211-OldPwdSameAsNewPwd-新密码与原始密码相同
+10212-FuzzyQueryError-未查询到相关用户
 
 # 账号相关
 10401-AccountInvalid-账号无效

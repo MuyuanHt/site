@@ -16,3 +16,10 @@ type UserInfo struct {
 	Birthday      time.Time `json:"birthday"`        // 生日
 	LastLoginTime time.Time `json:"last_login_time"` // 最后登录时间
 }
+
+// IgnoreUserInfo 用于批量查询时只返回关键信息
+type IgnoreUserInfo struct {
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Icon     string `json:"icon"`
+}

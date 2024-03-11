@@ -32,6 +32,8 @@ type UserServiceClient interface {
 	UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...grpc.CallOption) (*UpdatePasswordResp, error)
 	// 修改用户信息
 	UpdateUserInfo(ctx context.Context, in *ChangeUserInfoReq, opts ...grpc.CallOption) (*ChangeUserInfoResp, error)
+	// 模糊查询用户
+	FuzzyQueryUsers(ctx context.Context, in *FuzzyQueryUsersReq, opts ...grpc.CallOption) (*FuzzyQueryUsersResp, error)
 }
 
 type userServiceClient struct {
@@ -87,6 +89,15 @@ func (c *userServiceClient) UpdateUserInfo(ctx context.Context, in *ChangeUserIn
 	return out, nil
 }
 
+func (c *userServiceClient) FuzzyQueryUsers(ctx context.Context, in *FuzzyQueryUsersReq, opts ...grpc.CallOption) (*FuzzyQueryUsersResp, error) {
+	out := new(FuzzyQueryUsersResp)
+	err := c.cc.Invoke(ctx, "/user.UserService/FuzzyQueryUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -101,6 +112,8 @@ type UserServiceServer interface {
 	UpdatePassword(context.Context, *UpdatePasswordReq) (*UpdatePasswordResp, error)
 	// 修改用户信息
 	UpdateUserInfo(context.Context, *ChangeUserInfoReq) (*ChangeUserInfoResp, error)
+	// 模糊查询用户
+	FuzzyQueryUsers(context.Context, *FuzzyQueryUsersReq) (*FuzzyQueryUsersResp, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -122,6 +135,9 @@ func (UnimplementedUserServiceServer) UpdatePassword(context.Context, *UpdatePas
 }
 func (UnimplementedUserServiceServer) UpdateUserInfo(context.Context, *ChangeUserInfoReq) (*ChangeUserInfoResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserInfo not implemented")
+}
+func (UnimplementedUserServiceServer) FuzzyQueryUsers(context.Context, *FuzzyQueryUsersReq) (*FuzzyQueryUsersResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FuzzyQueryUsers not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -226,6 +242,24 @@ func _UserService_UpdateUserInfo_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_FuzzyQueryUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FuzzyQueryUsersReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).FuzzyQueryUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.UserService/FuzzyQueryUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).FuzzyQueryUsers(ctx, req.(*FuzzyQueryUsersReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -252,6 +286,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUserInfo",
 			Handler:    _UserService_UpdateUserInfo_Handler,
+		},
+		{
+			MethodName: "FuzzyQueryUsers",
+			Handler:    _UserService_FuzzyQueryUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

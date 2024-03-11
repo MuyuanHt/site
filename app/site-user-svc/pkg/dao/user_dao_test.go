@@ -19,3 +19,16 @@ func TestUpdateUserInfo(t *testing.T) {
 		t.Errorf("Error updating user: %v", err)
 	}
 }
+
+func TestDao_FindUserInfosLikeName(t *testing.T) {
+	d := initTestDao()
+	name := "u"
+	infos, err := d.FindUserInfosLikeName(name)
+	if err != nil {
+		t.Errorf("Error getting users: %v", err)
+	}
+	t.Logf("len: %d", len(infos))
+	for _, info := range infos {
+		t.Logf("id: %v, name: %v", info.ID, info.Username)
+	}
+}

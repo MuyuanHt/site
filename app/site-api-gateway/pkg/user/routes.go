@@ -20,6 +20,7 @@ func RegisterRoutes(r *gin.Engine, c *conf.ServiceConf, authSvc *auth.ServiceCli
 	// 查询用户信息路由组
 	find := rs.Group("/find")
 	find.POST("/user", svc.FindOneUser)
+	find.POST("/users", svc.FuzzyQueryUsers)
 
 	// 更新用户信息路由组
 	update := rs.Group("/update")
@@ -37,4 +38,8 @@ func (svc *ServiceClient) UpdatePassword(ctx *gin.Context) {
 
 func (svc *ServiceClient) UpdateUserInfo(ctx *gin.Context) {
 	routers.UpdateUserInfo(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) FuzzyQueryUsers(ctx *gin.Context) {
+	routers.FuzzyQueryUsers(ctx, svc.Client)
 }

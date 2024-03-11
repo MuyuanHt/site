@@ -56,3 +56,19 @@ func CheckPwdRegexp(password string) bool {
 	hasLetter := regexp.MustCompile(`[a-zA-Z]`).MatchString(password)
 	return hasNumber && hasLetter
 }
+
+// GetMaxInt 获取较大值
+func GetMaxInt(a int, b int) int {
+	if a < b {
+		return b
+	}
+	return a
+}
+
+// GetMinInt 获取较小值
+func GetMinInt(a int, b int) int {
+	if a > b {
+		return b
+	}
+	return a
+}
