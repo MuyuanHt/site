@@ -40,3 +40,11 @@ func (c *UserServiceClient) CreateUser(accountType int32, account string, passwo
 	}
 	return c.Client.CreateUser(context.Background(), req)
 }
+
+// UpdateLastLoginTime 登录时修改最后登录时间
+func (c *UserServiceClient) UpdateLastLoginTime(uid int64) (*pb.GeneralResp, error) {
+	req := &pb.GeneralReq{
+		Uid: uid,
+	}
+	return c.Client.UpdateLastLoginTime(context.Background(), req)
+}

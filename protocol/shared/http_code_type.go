@@ -16,7 +16,8 @@ const (
 	UpdateUserInfoError = 10209 // 修改用户信息失败
 	CreateUserError     = 10210 // 创建用户失败
 	OldPwdSameAsNewPwd  = 10211 // 新密码与原始密码相同
-	FuzzyQueryError     = 10212 // 批量查询失败
+	FuzzyQueryError     = 10212 // 未查询到相关用户
+	QueryParamNilError  = 10213 // 查询参数为空
 	AccountInvalid      = 10401 // 账号无效
 	AccountTypeInvalid  = 10402 // 账号类型无效
 	UnAuthorizedError   = 10403 // 账号未授权
@@ -46,7 +47,8 @@ var resultCodeText = map[int]string{
 	UpdateUserInfoError: "修改用户信息失败",
 	CreateUserError:     "创建用户失败",
 	OldPwdSameAsNewPwd:  "新密码与原始密码相同",
-	FuzzyQueryError:     "批量查询失败",
+	FuzzyQueryError:     "未查询到相关用户",
+	QueryParamNilError:  "查询参数为空",
 	AccountInvalid:      "账号无效",
 	AccountTypeInvalid:  "账号类型无效",
 	UnAuthorizedError:   "账号未授权",

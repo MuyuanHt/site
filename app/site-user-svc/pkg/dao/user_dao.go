@@ -47,6 +47,7 @@ func (d *Dao) FindUserInfosLikeName(paramName string) ([]*models.IgnoreUserInfo,
 		retInfos = append(retInfos, &models.IgnoreUserInfo{
 			ID:       v.ID,
 			Username: v.Username,
+			Icon:     v.Icon,
 		})
 	}
 	return retInfos, nil

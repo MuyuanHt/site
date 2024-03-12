@@ -71,5 +71,5 @@ type FuzzyQueryUsersReqBody struct {
 }
 
 type FuzzyQueryUsersRespBody struct {
-	Data []*FuzzyQueryUsersData `json:"data"`
+	Users []*FuzzyQueryUsersData `json:"users"`
 }

@@ -56,10 +56,16 @@ func (s *AuthService) Login(account string, password string) (string, error) {
 	if !tools.CheckHashPassword(hashPwd, password) {
 		return "", errors.New(shared.CodeMessageIgnoreCode(shared.UserOrPasswordError))
 	}
-
 	token, err := s.Jwt.GenerateTokenUsingRS256(resp.Data.Id, account)
 	if err != nil {
 		return "", errors.New(shared.CodeMessageIgnoreCode(shared.GenerateTokenError))
+	}
+	loginTimeResp, err := s.UserSvc.UpdateLastLoginTime(resp.Data.Id)
+	if err != nil {
+		return "", err
+	}
+	if loginTimeResp.Msg.Error != "" || loginTimeResp.Msg.Status != 200 {
+		return "", errors.New(resp.Msg.Error)
 	}
 	return token, nil
 }

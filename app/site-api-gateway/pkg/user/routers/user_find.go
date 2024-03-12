@@ -62,6 +62,10 @@ func FuzzyQueryUsers(ctx *gin.Context, c pb.UserServiceClient) {
 		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParseParamError))
 		return
 	}
+	if body.Param == "" {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.QueryParamNilError))
+		return
+	}
 	res, err := c.FuzzyQueryUsers(ctx, &pb.FuzzyQueryUsersReq{
 		Param: body.Param,
 	})
@@ -87,7 +91,7 @@ func FuzzyQueryUsers(ctx *gin.Context, c pb.UserServiceClient) {
 		})
 	}
 	data := api.FuzzyQueryUsersRespBody{
-		Data: users,
+		Users: users,
 	}
 	middleware.OkWithData(ctx, data)
 }

@@ -17,12 +17,23 @@ service UserService{
   rpc UpdateUserInfo(ChangeUserInfoReq) returns (ChangeUserInfoResp){}
   // 模糊查询用户
   rpc FuzzyQueryUsers(FuzzyQueryUsersReq) returns (FuzzyQueryUsersResp){}
+  // 修改最后登录时间
+  rpc UpdateLastLoginTime(GeneralReq) returns (GeneralResp) {}
 }
 
 // 返回的错误信息
 message RetMsg{
   int32 status = 1;
   string error = 2;
+}
+
+// 通用协议
+message GeneralReq{
+  int64 uid = 1;
+}
+
+message GeneralResp{
+  RetMsg msg = 1;
 }
 
 // 用户信息 用于展示

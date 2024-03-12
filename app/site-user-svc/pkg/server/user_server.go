@@ -8,6 +8,7 @@ import (
 	"site/common/tools"
 	"site/protocol/shared"
 	"site/protocol/user"
+	"time"
 )
 
 type UserServer struct {
@@ -203,5 +204,26 @@ func (s *UserServer) FuzzyQueryUsers(ctx context.Context, req *user.FuzzyQueryUs
 			Status: http.StatusOK,
 		},
 		Data: data,
+	}, nil
+}
+
+// UpdateLastLoginTime 修改最后登陆时间
+func (s *UserServer) UpdateLastLoginTime(ctx context.Context, req *user.GeneralReq) (*user.GeneralResp, error) {
+	info := &models.UserInfo{
+		LastLoginTime: time.Now(),
+	}
+	_, err := s.Svc.UpdateUserInfo(req.Uid, info)
+	if err != nil {
+		return &user.GeneralResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  err.Error(),
+			},
+		}, nil
+	}
+	return &user.GeneralResp{
+		Msg: &user.RetMsg{
+			Status: http.StatusOK,
+		},
 	}, nil
 }
