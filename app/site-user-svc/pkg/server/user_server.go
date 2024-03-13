@@ -128,6 +128,7 @@ func (s *UserServer) UpdatePassword(ctx context.Context, req *user.UpdatePasswor
 }
 
 // UpdateUserInfo 修改用户信息
+// TODO: 修改用户信息后自动更新二维码
 func (s *UserServer) UpdateUserInfo(ctx context.Context, req *user.ChangeUserInfoReq) (*user.ChangeUserInfoResp, error) {
 	birthdayTime, err := tools.Int64ToTime(req.Data.Birthday)
 	if err != nil {

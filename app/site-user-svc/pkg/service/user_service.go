@@ -79,6 +79,11 @@ func (s *UserService) CreateOneUser(accountType int32, account string, password 
 			Description:   description,
 			LastLoginTime: time.Now(),
 		},
+		UserRelation: models.UserRelation{
+			SearchLimit: shared.SearchLimitY,
+			VisitLimit:  shared.VisitLimitN,
+			AddLimit:    shared.AddLimitAgree,
+		},
 	}
 	switch accountType {
 	case shared.AccountTypePhone:
@@ -88,7 +93,10 @@ func (s *UserService) CreateOneUser(accountType int32, account string, password 
 	default:
 		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.AccountInvalid))
 	}
-	s.D.CreateAccount(info)
+	err = s.D.CreateAccount(info)
+	if err != nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.CreateUserError))
+	}
 	return info, nil
 }
 
@@ -135,6 +143,7 @@ func (s *UserService) UpdateUserInfo(uid int64, info *models.UserInfo) (*models.
 		Region:        checkZeroValue(info.Region, result.UserInfo.Region).(string),
 		Icon:          checkZeroValue(info.Icon, result.UserInfo.Icon).(string),
 		Description:   checkZeroValue(info.Description, result.UserInfo.Description).(string),
+		QRCode:        checkZeroValue(info.QRCode, result.UserInfo.QRCode).(string),
 		Birthday:      checkZeroValue(info.Birthday, result.UserInfo.Birthday).(time.Time),
 		LastLoginTime: checkZeroValue(info.LastLoginTime, result.UserInfo.LastLoginTime).(time.Time),
 	}

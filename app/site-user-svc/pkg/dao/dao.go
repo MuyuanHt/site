@@ -20,6 +20,10 @@ func InitDao(mysqlDsn string) (*Dao, error) {
 	if err != nil {
 		return nil, err
 	}
+	err = d.DB.AutoMigrate(&models.UserRelation{})
+	if err != nil {
+		return nil, err
+	}
 	err = d.DB.AutoMigrate(&models.Account{})
 	if err != nil {
 		return nil, err

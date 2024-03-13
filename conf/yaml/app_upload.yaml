@@ -18,7 +18,7 @@ services:
       password: 111
       host: localhost
       port: 3306
-      dbname: site_user_svs
+      dbname: site_user_svc
 
   chat:
     name: chat-service
@@ -29,7 +29,7 @@ services:
       password: 111
       host: localhost
       port: 3306
-      dbname: site_chat_svs
+      dbname: site_chat_svc
 
   auth:
     name: auth-service
@@ -45,7 +45,7 @@ services:
       password: 111
       host: localhost
       port: 3306
-      dbname: site_document_svs
+      dbname: site_document_svc
 
   team:
     name: collaborate-service
@@ -56,7 +56,7 @@ services:
       password: 111
       host: localhost
       port: 3306
-      dbname: site_team_svs
+      dbname: site_team_svc
 
   calendar:
     name: calendar-service
@@ -67,7 +67,7 @@ services:
       password: 111
       host: localhost
       port: 3306
-      dbname: site_calendar_svs
+      dbname: site_calendar_svc
 
 
 

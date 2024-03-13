@@ -11,4 +11,17 @@
 1-GenderTYpeMan-男
 2-GenderTypeWoman-女
 
+# 隐私设置
+# 搜索限制
+1-SearchLimitY-可搜索 默认值
+2-SearchLimitN-不可搜索
+# 访问限制
+1-VisitLimitY-可访问 默认值
+2-VisitLimitN-不可访问
+3-VisitLimitFriendY-朋友可访问
+# 添加限制
+1-AddLimitY-直接添加
+2-AddLimitN-不可添加
+3-AddLimitAgree-需要验证 默认值
+
 # 将这行放在最后一行 并且不要删除这行

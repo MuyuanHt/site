@@ -39,6 +39,9 @@ func initTestTempAccount() *models.Account {
 			Icon:        "temp://xxx.xxx.xxx/xxx.png",
 			Description: "description text",
 		},
+		UserRelation: models.UserRelation{
+			SearchLimit: 2,
+		},
 	}
 }
 
@@ -46,7 +49,10 @@ func TestAccountDao_CreateAccount(t *testing.T) {
 	d := initTestDao()
 	a := initTestTempAccount()
 	a.Phone = "12345678902"
-	d.CreateAccount(a)
+	err := d.CreateAccount(a)
+	if err != nil {
+		t.Errorf("Error creating account %v", err)
+	}
 }
 
 func TestAccountDao_FindOneAccountByAccount(t *testing.T) {
@@ -54,7 +60,11 @@ func TestAccountDao_FindOneAccountByAccount(t *testing.T) {
 	a := initTestTempAccount()
 	a.Phone = "12345678903"
 	a.Email = "123@123.com"
-	d.CreateAccount(a)
+	err := d.CreateAccount(a)
+	if err != nil {
+		t.Errorf("Error creating account %v", err)
+		return
+	}
 	res, _ := d.FindOneAccountByAccount(shared.AccountTypePhone, a.Phone)
 	want := a.Email
 	got := res.Email
@@ -68,7 +78,11 @@ func TestAccountDao_FindOneUserByAccount(t *testing.T) {
 	a := initTestTempAccount()
 	a.Phone = "12345678916"
 	a.UserInfo.Username = "test_name15"
-	d.CreateAccount(a)
+	err := d.CreateAccount(a)
+	if err != nil {
+		t.Errorf("Error creating account %v", err)
+		return
+	}
 	res, _ := d.FindOneUserByAccount(shared.AccountTypePhone, a.Phone)
 	// 看一下 userinfo 有没有查成功
 	want := a.UserInfo.Username

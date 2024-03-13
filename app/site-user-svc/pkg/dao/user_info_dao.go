@@ -6,14 +6,28 @@ import (
 )
 
 // CreateUser 插入用户信息
-func (d *Dao) CreateUser(user *models.UserInfo) {
-	d.DB.Create(user)
+func (d *Dao) CreateUser(info *models.UserInfo) error {
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
+	result := tx.Model(models.UserInfo{}).Create(info)
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+	return tx.Commit().Error
 }
 
 // FindUserInfoById 通过 id 查询用户信息
 func (d *Dao) FindUserInfoById(id int64) (*models.UserInfo, error) {
 	var u *models.UserInfo
-	result := d.DB.First(&u, uint(id))
+	result := d.DB.Model(models.UserInfo{}).First(&u, uint(id))
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -32,9 +46,10 @@ func (d *Dao) UpdateUserInfo(id int64, user *models.UserInfo) error {
 	result.Region = user.Region
 	result.Icon = user.Icon
 	result.Description = user.Description
+	result.QRCode = user.QRCode
 	result.Birthday = user.Birthday
 	result.LastLoginTime = user.LastLoginTime
-	d.DB.Save(result)
+	d.DB.Model(models.UserInfo{}).Save(result)
 	return nil
 }
 

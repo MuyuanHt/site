@@ -8,9 +8,23 @@ import (
 	"strconv"
 )
 
-// CreateAccount 插入账户记录
-func (d *Dao) CreateAccount(account *models.Account) {
-	d.DB.Create(account)
+// CreateAccount 插入单条账户记录
+func (d *Dao) CreateAccount(account *models.Account) error {
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
+	result := tx.Model(models.Account{}).Create(account)
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+	return tx.Commit().Error
 }
 
 // FindOneAccountById 通过 id 查询账户信息
