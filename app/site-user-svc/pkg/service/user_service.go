@@ -39,19 +39,19 @@ func checkZeroValue(input interface{}, replace interface{}) interface{} {
 // FindOneUserByAccount 查询单个用户
 func (s *UserService) FindOneUserByAccount(accountType int32, account string) (*models.Account, error) {
 	info, err := s.D.FindOneUserByAccount(int(accountType), account)
-	if info != nil {
-		return info, nil
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+	return info, nil
 }
 
 // FindOneUserByUid 查询单个用户
 func (s *UserService) FindOneUserByUid(uid int64) (*models.Account, error) {
 	info, err := s.D.FindOneAccountByUid(uid)
-	if info != nil {
-		return info, nil
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+	return info, nil
 }
 
 // CreateOneUser 创建单个用户
@@ -192,4 +192,78 @@ func (s *UserService) FuzzyQueryUsers(param string) ([]*models.IgnoreAccount, er
 	}
 	accounts = mergeIgnoreAccounts(accounts, usersByName)
 	return accounts, nil
+}
+
+// UpdateUserLimit 修改用户隐私权限
+func (s *UserService) UpdateUserLimit(uid int64, limit *models.UserLimit) (*models.Account, error) {
+	if limit == nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
+	result, err := s.D.FindOneUserByUid(uid)
+	if err != nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UserNotFound))
+	}
+	if !tools.IsSearchLimit(int(limit.SearchLimit)) || !tools.IsVisitLimit(int(limit.VisitLimit)) || !tools.IsAddLimit(int(limit.AddLimit)) {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
+	newRelation := &models.UserRelation{
+		SearchLimit:    limit.SearchLimit,
+		VisitLimit:     limit.VisitLimit,
+		AddLimit:       limit.AddLimit,
+		FriendNum:      result.UserRelation.FriendNum,
+		TopFriendNum:   result.UserRelation.TopFriendNum,
+		BlackFriendNum: result.UserRelation.BlackFriendNum,
+		GroupNum:       result.UserRelation.GroupNum,
+		OwnerGroupNum:  result.UserRelation.OwnerGroupNum,
+		AdminGroupNum:  result.UserRelation.AdminGroupNum,
+	}
+	err = s.D.UpdateUserRelation(int64(result.RelationId), newRelation)
+	if err != nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UpdateUserRelationError))
+	}
+	resAccount, err := s.D.FindOneUserByUid(uid)
+	if err != nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UserNotFound))
+	}
+	return resAccount, nil
+}
+
+// UpdateUserRelationNum 修改用户关系数量 传入参数为变化量
+func (s *UserService) UpdateUserRelationNum(uid int64, delta *models.UserRelationNum) (*models.Account, error) {
+	if delta == nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
+	result, err := s.D.FindOneUserByUid(uid)
+	if err != nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UserNotFound))
+	}
+	friendNum := result.UserRelation.FriendNum + delta.FriendNum
+	topFriendNum := result.UserRelation.TopFriendNum + delta.TopFriendNum
+	blackFriendNum := result.UserRelation.BlackFriendNum + delta.BlackFriendNum
+	groupNum := result.UserRelation.GroupNum + delta.GroupNum
+	ownerGroupNum := result.UserRelation.OwnerGroupNum + delta.OwnerGroupNum
+	adminGroupNum := result.UserRelation.AdminGroupNum + delta.AdminGroupNum
+	if friendNum < 0 || topFriendNum < 0 || blackFriendNum < 0 || groupNum < 0 || ownerGroupNum < 0 || adminGroupNum < 0 {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
+	newRelation := &models.UserRelation{
+		SearchLimit:    result.UserRelation.SearchLimit,
+		VisitLimit:     result.UserRelation.VisitLimit,
+		AddLimit:       result.UserRelation.AddLimit,
+		FriendNum:      friendNum,
+		TopFriendNum:   topFriendNum,
+		BlackFriendNum: blackFriendNum,
+		GroupNum:       groupNum,
+		OwnerGroupNum:  ownerGroupNum,
+		AdminGroupNum:  adminGroupNum,
+	}
+	err = s.D.UpdateUserRelation(int64(result.RelationId), newRelation)
+	if err != nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UpdateUserRelationError))
+	}
+	resAccount, err := s.D.FindOneUserByUid(uid)
+	if err != nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UserNotFound))
+	}
+	return resAccount, nil
 }

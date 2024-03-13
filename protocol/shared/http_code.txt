@@ -25,6 +25,7 @@
 10101-CodeNotFound-状态码异常
 10102-ParseParamError-参数解析失败
 10103-ServerError-服务器内部出错
+10104-ParamError-参数错误
 
 # 用户相关
 10201-UserNotFound-用户不存在
@@ -40,6 +41,7 @@
 10211-OldPwdSameAsNewPwd-新密码与原始密码相同
 10212-FuzzyQueryError-未查询到相关用户
 10213-QueryParamNilError-查询参数为空
+10214-UpdateUserRelationError-修改用户关系信息失败
 
 # 账号相关
 10401-AccountInvalid-账号无效

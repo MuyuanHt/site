@@ -92,3 +92,43 @@ func UpdateUserInfo(ctx *gin.Context, c pb.UserServiceClient) {
 	}
 	middleware.OkWithData(ctx, data)
 }
+
+// UpdateUserLimit 修改用户隐私权限的路由函数
+func UpdateUserLimit(ctx *gin.Context, c pb.UserServiceClient) {
+	body := api.UpdateUserLimitReqBody{}
+	if err := ctx.BindJSON(&body); err != nil {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParseParamError))
+		return
+	}
+	uid, err := strconv.ParseInt(body.Uid, 10, 64)
+	if err != nil {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParseParamError))
+		return
+	}
+	if !tools.IsSearchLimit(int(body.SearchLimit)) || !tools.IsVisitLimit(int(body.VisitLimit)) || !tools.IsAddLimit(int(body.AddLimit)) {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParamError))
+		return
+	}
+	res, err := c.UpdateUserLimit(ctx, &pb.UpdateUserLimitReq{
+		Uid: uid,
+		Data: &pb.UserLimitData{
+			SearchLimit: body.SearchLimit,
+			VisitLimit:  body.VisitLimit,
+			AddLimit:    body.AddLimit,
+		},
+	})
+	if err != nil {
+		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ServerError))
+		return
+	}
+	if !tools.CompareInt32Int(res.Msg.Status, http.StatusOK) {
+		middleware.CheckStatusCode(ctx, int(res.Msg.Status), res.Msg.Error, nil)
+		return
+	}
+	data := api.UpdateUserLimitRespBody{
+		SearchLimit: res.Data.SearchLimit,
+		VisitLimit:  res.Data.VisitLimit,
+		AddLimit:    res.Data.AddLimit,
+	}
+	middleware.OkWithData(ctx, data)
+}

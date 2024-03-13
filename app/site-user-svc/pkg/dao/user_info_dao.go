@@ -36,20 +36,23 @@ func (d *Dao) FindUserInfoById(id int64) (*models.UserInfo, error) {
 
 // UpdateUserInfo 修改用户信息
 func (d *Dao) UpdateUserInfo(id int64, user *models.UserInfo) error {
-	result, err := d.FindUserInfoById(id)
+	info, err := d.FindUserInfoById(id)
 	if err != nil {
 		return err
 	}
-	result.Username = user.Username
-	result.Age = user.Age
-	result.Gender = user.Gender
-	result.Region = user.Region
-	result.Icon = user.Icon
-	result.Description = user.Description
-	result.QRCode = user.QRCode
-	result.Birthday = user.Birthday
-	result.LastLoginTime = user.LastLoginTime
-	d.DB.Model(models.UserInfo{}).Save(result)
+	info.Username = user.Username
+	info.Age = user.Age
+	info.Gender = user.Gender
+	info.Region = user.Region
+	info.Icon = user.Icon
+	info.Description = user.Description
+	info.QRCode = user.QRCode
+	info.Birthday = user.Birthday
+	info.LastLoginTime = user.LastLoginTime
+	result := d.DB.Save(info)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 

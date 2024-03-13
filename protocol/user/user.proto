@@ -19,6 +19,8 @@ service UserService{
   rpc FuzzyQueryUsers(FuzzyQueryUsersReq) returns (FuzzyQueryUsersResp){}
   // 修改最后登录时间
   rpc UpdateLastLoginTime(GeneralReq) returns (GeneralResp) {}
+  // 修改用户隐私权限
+  rpc UpdateUserLimit(UpdateUserLimitReq) returns (UpdateUserLimitResp){}
 }
 
 // 返回的错误信息
@@ -135,4 +137,21 @@ message FuzzyQueryUsersReq{
 message FuzzyQueryUsersResp{
   RetMsg msg = 1;
   repeated IgnoreUserData data = 2;
+}
+
+// 修改用户隐私权限
+message UserLimitData{
+  int32 searchLimit = 1;
+  int32 visitLimit = 2;
+  int32 addLimit = 3;
+}
+
+message UpdateUserLimitReq{
+  int64 uid = 1;
+  UserLimitData data = 2;
+}
+
+message UpdateUserLimitResp{
+  RetMsg msg = 1;
+  UserLimitData data = 2;
 }

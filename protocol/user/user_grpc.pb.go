@@ -36,6 +36,8 @@ type UserServiceClient interface {
 	FuzzyQueryUsers(ctx context.Context, in *FuzzyQueryUsersReq, opts ...grpc.CallOption) (*FuzzyQueryUsersResp, error)
 	// 修改最后登录时间
 	UpdateLastLoginTime(ctx context.Context, in *GeneralReq, opts ...grpc.CallOption) (*GeneralResp, error)
+	// 修改用户隐私权限
+	UpdateUserLimit(ctx context.Context, in *UpdateUserLimitReq, opts ...grpc.CallOption) (*UpdateUserLimitResp, error)
 }
 
 type userServiceClient struct {
@@ -109,6 +111,15 @@ func (c *userServiceClient) UpdateLastLoginTime(ctx context.Context, in *General
 	return out, nil
 }
 
+func (c *userServiceClient) UpdateUserLimit(ctx context.Context, in *UpdateUserLimitReq, opts ...grpc.CallOption) (*UpdateUserLimitResp, error) {
+	out := new(UpdateUserLimitResp)
+	err := c.cc.Invoke(ctx, "/user.UserService/UpdateUserLimit", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -127,6 +138,8 @@ type UserServiceServer interface {
 	FuzzyQueryUsers(context.Context, *FuzzyQueryUsersReq) (*FuzzyQueryUsersResp, error)
 	// 修改最后登录时间
 	UpdateLastLoginTime(context.Context, *GeneralReq) (*GeneralResp, error)
+	// 修改用户隐私权限
+	UpdateUserLimit(context.Context, *UpdateUserLimitReq) (*UpdateUserLimitResp, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -154,6 +167,9 @@ func (UnimplementedUserServiceServer) FuzzyQueryUsers(context.Context, *FuzzyQue
 }
 func (UnimplementedUserServiceServer) UpdateLastLoginTime(context.Context, *GeneralReq) (*GeneralResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateLastLoginTime not implemented")
+}
+func (UnimplementedUserServiceServer) UpdateUserLimit(context.Context, *UpdateUserLimitReq) (*UpdateUserLimitResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserLimit not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -294,6 +310,24 @@ func _UserService_UpdateLastLoginTime_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_UpdateUserLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserLimitReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UpdateUserLimit(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.UserService/UpdateUserLimit",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UpdateUserLimit(ctx, req.(*UpdateUserLimitReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -328,6 +362,10 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateLastLoginTime",
 			Handler:    _UserService_UpdateLastLoginTime_Handler,
+		},
+		{
+			MethodName: "UpdateUserLimit",
+			Handler:    _UserService_UpdateUserLimit_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

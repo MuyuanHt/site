@@ -84,7 +84,10 @@ func (d *Dao) UpdatePasswordByUid(uid int64, password string) error {
 		return err
 	}
 	a.Password = password
-	d.DB.Save(a)
+	result := d.DB.Save(a)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
@@ -95,7 +98,10 @@ func (d *Dao) UpdateEmailById(id int64, email string) error {
 		return err
 	}
 	a.Email = email
-	d.DB.Save(a)
+	result := d.DB.Save(a)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
@@ -105,7 +111,10 @@ func (d *Dao) UnsubscribeById(id int64) error {
 	if err != nil {
 		return err
 	}
-	d.DB.Delete(a)
+	result := d.DB.Delete(a)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
@@ -115,7 +124,10 @@ func (d *Dao) UnsubscribeByUId(uid int64) error {
 	if err != nil {
 		return err
 	}
-	d.DB.Delete(a)
+	result := d.DB.Delete(a)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
 
@@ -162,6 +174,12 @@ func (d *Dao) FindOneUserByAccount(accountType int, account string) (*models.Acc
 		return nil, err
 	}
 	a.UserInfo = *info
+	var relation *models.UserRelation
+	relation, err = d.FindRelationById(int64(a.RelationId))
+	if err != nil {
+		return nil, err
+	}
+	a.UserRelation = *relation
 	return a, nil
 }
 
@@ -177,6 +195,12 @@ func (d *Dao) FindOneUserByUid(uid int64) (*models.Account, error) {
 		return nil, err
 	}
 	a.UserInfo = *info
+	var relation *models.UserRelation
+	relation, err = d.FindRelationById(int64(a.RelationId))
+	if err != nil {
+		return nil, err
+	}
+	a.UserRelation = *relation
 	return a, nil
 }
 

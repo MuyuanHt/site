@@ -1113,6 +1113,180 @@ func (x *FuzzyQueryUsersResp) GetData() []*IgnoreUserData {
 	return nil
 }
 
+// 修改用户隐私权限
+type UserLimitData struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	SearchLimit int32 `protobuf:"varint,1,opt,name=searchLimit,proto3" json:"searchLimit,omitempty"`
+	VisitLimit  int32 `protobuf:"varint,2,opt,name=visitLimit,proto3" json:"visitLimit,omitempty"`
+	AddLimit    int32 `protobuf:"varint,3,opt,name=addLimit,proto3" json:"addLimit,omitempty"`
+}
+
+func (x *UserLimitData) Reset() {
+	*x = UserLimitData{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protocol_user_user_proto_msgTypes[18]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UserLimitData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserLimitData) ProtoMessage() {}
+
+func (x *UserLimitData) ProtoReflect() protoreflect.Message {
+	mi := &file_protocol_user_user_proto_msgTypes[18]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserLimitData.ProtoReflect.Descriptor instead.
+func (*UserLimitData) Descriptor() ([]byte, []int) {
+	return file_protocol_user_user_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *UserLimitData) GetSearchLimit() int32 {
+	if x != nil {
+		return x.SearchLimit
+	}
+	return 0
+}
+
+func (x *UserLimitData) GetVisitLimit() int32 {
+	if x != nil {
+		return x.VisitLimit
+	}
+	return 0
+}
+
+func (x *UserLimitData) GetAddLimit() int32 {
+	if x != nil {
+		return x.AddLimit
+	}
+	return 0
+}
+
+type UpdateUserLimitReq struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Uid  int64          `protobuf:"varint,1,opt,name=uid,proto3" json:"uid,omitempty"`
+	Data *UserLimitData `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *UpdateUserLimitReq) Reset() {
+	*x = UpdateUserLimitReq{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protocol_user_user_proto_msgTypes[19]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateUserLimitReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserLimitReq) ProtoMessage() {}
+
+func (x *UpdateUserLimitReq) ProtoReflect() protoreflect.Message {
+	mi := &file_protocol_user_user_proto_msgTypes[19]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserLimitReq.ProtoReflect.Descriptor instead.
+func (*UpdateUserLimitReq) Descriptor() ([]byte, []int) {
+	return file_protocol_user_user_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *UpdateUserLimitReq) GetUid() int64 {
+	if x != nil {
+		return x.Uid
+	}
+	return 0
+}
+
+func (x *UpdateUserLimitReq) GetData() *UserLimitData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type UpdateUserLimitResp struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Msg  *RetMsg        `protobuf:"bytes,1,opt,name=msg,proto3" json:"msg,omitempty"`
+	Data *UserLimitData `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+}
+
+func (x *UpdateUserLimitResp) Reset() {
+	*x = UpdateUserLimitResp{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protocol_user_user_proto_msgTypes[20]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UpdateUserLimitResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateUserLimitResp) ProtoMessage() {}
+
+func (x *UpdateUserLimitResp) ProtoReflect() protoreflect.Message {
+	mi := &file_protocol_user_user_proto_msgTypes[20]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateUserLimitResp.ProtoReflect.Descriptor instead.
+func (*UpdateUserLimitResp) Descriptor() ([]byte, []int) {
+	return file_protocol_user_user_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *UpdateUserLimitResp) GetMsg() *RetMsg {
+	if x != nil {
+		return x.Msg
+	}
+	return nil
+}
+
+func (x *UpdateUserLimitResp) GetData() *UserLimitData {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 var File_protocol_user_user_proto protoreflect.FileDescriptor
 
 var file_protocol_user_user_proto_rawDesc = []byte{
@@ -1219,7 +1393,25 @@ var file_protocol_user_user_proto_rawDesc = []byte{
 	0x67, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x12, 0x28, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x02,
 	0x20, 0x03, 0x28, 0x0b, 0x32, 0x14, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x49, 0x67, 0x6e, 0x6f,
 	0x72, 0x65, 0x55, 0x73, 0x65, 0x72, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61,
-	0x32, 0xda, 0x03, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
+	0x22, 0x6d, 0x0a, 0x0d, 0x55, 0x73, 0x65, 0x72, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x44, 0x61, 0x74,
+	0x61, 0x12, 0x20, 0x0a, 0x0b, 0x73, 0x65, 0x61, 0x72, 0x63, 0x68, 0x4c, 0x69, 0x6d, 0x69, 0x74,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0b, 0x73, 0x65, 0x61, 0x72, 0x63, 0x68, 0x4c, 0x69,
+	0x6d, 0x69, 0x74, 0x12, 0x1e, 0x0a, 0x0a, 0x76, 0x69, 0x73, 0x69, 0x74, 0x4c, 0x69, 0x6d, 0x69,
+	0x74, 0x18, 0x02, 0x20, 0x01, 0x28, 0x05, 0x52, 0x0a, 0x76, 0x69, 0x73, 0x69, 0x74, 0x4c, 0x69,
+	0x6d, 0x69, 0x74, 0x12, 0x1a, 0x0a, 0x08, 0x61, 0x64, 0x64, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x18,
+	0x03, 0x20, 0x01, 0x28, 0x05, 0x52, 0x08, 0x61, 0x64, 0x64, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x22,
+	0x4f, 0x0a, 0x12, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x4c, 0x69, 0x6d,
+	0x69, 0x74, 0x52, 0x65, 0x71, 0x12, 0x10, 0x0a, 0x03, 0x75, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x03, 0x52, 0x03, 0x75, 0x69, 0x64, 0x12, 0x27, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65,
+	0x72, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x22, 0x5e, 0x0a, 0x13, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x4c, 0x69,
+	0x6d, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x12, 0x1e, 0x0a, 0x03, 0x6d, 0x73, 0x67, 0x18, 0x01,
+	0x20, 0x01, 0x28, 0x0b, 0x32, 0x0c, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x74, 0x4d,
+	0x73, 0x67, 0x52, 0x03, 0x6d, 0x73, 0x67, 0x12, 0x27, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18,
+	0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x13, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x55, 0x73, 0x65,
+	0x72, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x44, 0x61, 0x74, 0x61, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61,
+	0x32, 0xa4, 0x04, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65,
 	0x12, 0x3c, 0x0a, 0x0b, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12,
 	0x14, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x46, 0x69, 0x6e, 0x64, 0x4f, 0x6e, 0x65, 0x55, 0x73,
 	0x65, 0x72, 0x52, 0x65, 0x71, 0x1a, 0x15, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x46, 0x69, 0x6e,
@@ -1248,9 +1440,14 @@ var file_protocol_user_user_proto_rawDesc = []byte{
 	0x3c, 0x0a, 0x13, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x4c, 0x61, 0x73, 0x74, 0x4c, 0x6f, 0x67,
 	0x69, 0x6e, 0x54, 0x69, 0x6d, 0x65, 0x12, 0x10, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x47, 0x65,
 	0x6e, 0x65, 0x72, 0x61, 0x6c, 0x52, 0x65, 0x71, 0x1a, 0x11, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e,
-	0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x42, 0x11, 0x5a,
-	0x0f, 0x2e, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x75, 0x73, 0x65, 0x72,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x47, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x6c, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x12, 0x48, 0x0a,
+	0x0f, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x4c, 0x69, 0x6d, 0x69, 0x74,
+	0x12, 0x18, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73,
+	0x65, 0x72, 0x4c, 0x69, 0x6d, 0x69, 0x74, 0x52, 0x65, 0x71, 0x1a, 0x19, 0x2e, 0x75, 0x73, 0x65,
+	0x72, 0x2e, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x4c, 0x69, 0x6d, 0x69,
+	0x74, 0x52, 0x65, 0x73, 0x70, 0x22, 0x00, 0x42, 0x11, 0x5a, 0x0f, 0x2e, 0x2f, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x63, 0x6f, 0x6c, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74,
+	0x6f, 0x33,
 }
 
 var (
@@ -1265,7 +1462,7 @@ func file_protocol_user_user_proto_rawDescGZIP() []byte {
 	return file_protocol_user_user_proto_rawDescData
 }
 
-var file_protocol_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_protocol_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_protocol_user_user_proto_goTypes = []interface{}{
 	(*RetMsg)(nil),              // 0: user.RetMsg
 	(*GeneralReq)(nil),          // 1: user.GeneralReq
@@ -1285,6 +1482,9 @@ var file_protocol_user_user_proto_goTypes = []interface{}{
 	(*UpdatePasswordResp)(nil),  // 15: user.UpdatePasswordResp
 	(*FuzzyQueryUsersReq)(nil),  // 16: user.FuzzyQueryUsersReq
 	(*FuzzyQueryUsersResp)(nil), // 17: user.FuzzyQueryUsersResp
+	(*UserLimitData)(nil),       // 18: user.UserLimitData
+	(*UpdateUserLimitReq)(nil),  // 19: user.UpdateUserLimitReq
+	(*UpdateUserLimitResp)(nil), // 20: user.UpdateUserLimitResp
 }
 var file_protocol_user_user_proto_depIdxs = []int32{
 	0,  // 0: user.GeneralResp.msg:type_name -> user.RetMsg
@@ -1300,25 +1500,30 @@ var file_protocol_user_user_proto_depIdxs = []int32{
 	0,  // 10: user.UpdatePasswordResp.msg:type_name -> user.RetMsg
 	0,  // 11: user.FuzzyQueryUsersResp.msg:type_name -> user.RetMsg
 	4,  // 12: user.FuzzyQueryUsersResp.data:type_name -> user.IgnoreUserData
-	5,  // 13: user.UserService.FindOneUser:input_type -> user.FindOneUserReq
-	8,  // 14: user.UserService.FindAccount:input_type -> user.FindAccountReq
-	10, // 15: user.UserService.CreateUser:input_type -> user.CreateUserReq
-	14, // 16: user.UserService.UpdatePassword:input_type -> user.UpdatePasswordReq
-	12, // 17: user.UserService.UpdateUserInfo:input_type -> user.ChangeUserInfoReq
-	16, // 18: user.UserService.FuzzyQueryUsers:input_type -> user.FuzzyQueryUsersReq
-	1,  // 19: user.UserService.UpdateLastLoginTime:input_type -> user.GeneralReq
-	6,  // 20: user.UserService.FindOneUser:output_type -> user.FindOneUserResp
-	9,  // 21: user.UserService.FindAccount:output_type -> user.FindAccountResp
-	11, // 22: user.UserService.CreateUser:output_type -> user.CreateUserResp
-	15, // 23: user.UserService.UpdatePassword:output_type -> user.UpdatePasswordResp
-	13, // 24: user.UserService.UpdateUserInfo:output_type -> user.ChangeUserInfoResp
-	17, // 25: user.UserService.FuzzyQueryUsers:output_type -> user.FuzzyQueryUsersResp
-	2,  // 26: user.UserService.UpdateLastLoginTime:output_type -> user.GeneralResp
-	20, // [20:27] is the sub-list for method output_type
-	13, // [13:20] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	18, // 13: user.UpdateUserLimitReq.data:type_name -> user.UserLimitData
+	0,  // 14: user.UpdateUserLimitResp.msg:type_name -> user.RetMsg
+	18, // 15: user.UpdateUserLimitResp.data:type_name -> user.UserLimitData
+	5,  // 16: user.UserService.FindOneUser:input_type -> user.FindOneUserReq
+	8,  // 17: user.UserService.FindAccount:input_type -> user.FindAccountReq
+	10, // 18: user.UserService.CreateUser:input_type -> user.CreateUserReq
+	14, // 19: user.UserService.UpdatePassword:input_type -> user.UpdatePasswordReq
+	12, // 20: user.UserService.UpdateUserInfo:input_type -> user.ChangeUserInfoReq
+	16, // 21: user.UserService.FuzzyQueryUsers:input_type -> user.FuzzyQueryUsersReq
+	1,  // 22: user.UserService.UpdateLastLoginTime:input_type -> user.GeneralReq
+	19, // 23: user.UserService.UpdateUserLimit:input_type -> user.UpdateUserLimitReq
+	6,  // 24: user.UserService.FindOneUser:output_type -> user.FindOneUserResp
+	9,  // 25: user.UserService.FindAccount:output_type -> user.FindAccountResp
+	11, // 26: user.UserService.CreateUser:output_type -> user.CreateUserResp
+	15, // 27: user.UserService.UpdatePassword:output_type -> user.UpdatePasswordResp
+	13, // 28: user.UserService.UpdateUserInfo:output_type -> user.ChangeUserInfoResp
+	17, // 29: user.UserService.FuzzyQueryUsers:output_type -> user.FuzzyQueryUsersResp
+	2,  // 30: user.UserService.UpdateLastLoginTime:output_type -> user.GeneralResp
+	20, // 31: user.UserService.UpdateUserLimit:output_type -> user.UpdateUserLimitResp
+	24, // [24:32] is the sub-list for method output_type
+	16, // [16:24] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_protocol_user_user_proto_init() }
@@ -1543,6 +1748,42 @@ func file_protocol_user_user_proto_init() {
 				return nil
 			}
 		}
+		file_protocol_user_user_proto_msgTypes[18].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UserLimitData); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protocol_user_user_proto_msgTypes[19].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateUserLimitReq); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protocol_user_user_proto_msgTypes[20].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UpdateUserLimitResp); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -1550,7 +1791,7 @@ func file_protocol_user_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protocol_user_user_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

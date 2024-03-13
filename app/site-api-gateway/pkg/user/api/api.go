@@ -73,3 +73,18 @@ type FuzzyQueryUsersReqBody struct {
 type FuzzyQueryUsersRespBody struct {
 	Users []*FuzzyQueryUsersData `json:"users"`
 }
+
+// 修改用户隐私权限
+
+type UpdateUserLimitReqBody struct {
+	Uid         string `json:"uid"`
+	SearchLimit int32  `json:"search_limit"`
+	VisitLimit  int32  `json:"visit_limit"`
+	AddLimit    int32  `json:"add_limit"`
+}
+
+type UpdateUserLimitRespBody struct {
+	SearchLimit int32 `json:"search_limit"`
+	VisitLimit  int32 `json:"visit_limit"`
+	AddLimit    int32 `json:"add_limit"`
+}

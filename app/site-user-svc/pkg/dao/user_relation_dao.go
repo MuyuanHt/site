@@ -33,19 +33,22 @@ func (d *Dao) FindRelationById(id int64) (*models.UserRelation, error) {
 
 // UpdateUserRelation 修改用户关系信息
 func (d *Dao) UpdateUserRelation(id int64, relation *models.UserRelation) error {
-	result, err := d.FindRelationById(id)
+	r, err := d.FindRelationById(id)
 	if err != nil {
 		return err
 	}
-	result.SearchLimit = relation.SearchLimit
-	result.VisitLimit = relation.VisitLimit
-	result.AddLimit = relation.AddLimit
-	result.FriendNum = relation.FriendNum
-	result.TopFriendNum = relation.TopFriendNum
-	result.BlackFriendNum = relation.BlackFriendNum
-	result.GroupNum = relation.GroupNum
-	result.OwnerGroupNum = relation.OwnerGroupNum
-	result.AdminGroupNum = relation.AdminGroupNum
-	d.DB.Model(models.UserRelation{}).Save(result)
+	r.SearchLimit = relation.SearchLimit
+	r.VisitLimit = relation.VisitLimit
+	r.AddLimit = relation.AddLimit
+	r.FriendNum = relation.FriendNum
+	r.TopFriendNum = relation.TopFriendNum
+	r.BlackFriendNum = relation.BlackFriendNum
+	r.GroupNum = relation.GroupNum
+	r.OwnerGroupNum = relation.OwnerGroupNum
+	r.AdminGroupNum = relation.AdminGroupNum
+	result := d.DB.Save(r)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
