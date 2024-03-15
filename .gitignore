@@ -16,6 +16,7 @@ app.yaml
 
 # 其他
 vendor/
+server-log/
 
 *.log
 *.out

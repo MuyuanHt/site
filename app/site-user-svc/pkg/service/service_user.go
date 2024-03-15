@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-// TODO: proto 传输时间格式不使用时间戳
+// TODO: 针对生日部分 proto 传输时间格式不使用时间戳
 
 type UserService struct {
 	D *dao.Dao

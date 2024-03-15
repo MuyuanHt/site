@@ -8,39 +8,33 @@ import (
 	"site/app/site-auth-svc/pkg/server"
 	"site/app/site-auth-svc/pkg/service"
 	"site/app/site-auth-svc/pkg/utils"
+	"site/common/inits"
 	"site/conf"
 	pb "site/protocol/auth"
 )
 
 func main() {
-	appConf, err := conf.LoadAppConf()
-	if err != nil {
-		panic(err)
-	}
-
-	err = conf.LoadParamConf()
-	if err != nil {
-		panic(err)
-	}
-
-	c := appConf.GetServiceConf("auth")
+	inits.AppInitialize()
+	authConf := conf.GlobalAppConfig.GetServiceConf("auth")
+	userConf := conf.GlobalAppConfig.GetServiceConf("user")
+	authConf.InitRunningServerName()
+	inits.ToolInitialize()
 
 	// 服务监听客户端连接端口
-	l, err := net.Listen("tcp", c.GetAddress())
+	l, err := net.Listen("tcp", authConf.GetAddress())
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
+	log.Printf("Auth_server port: %v", authConf.Port)
 
-	userConf := appConf.GetServiceConf("user")
+	// 初始化其他服务客户端
 	userSvc := client.InitUserServiceClient(userConf.GetAddress())
-
-	log.Printf("Auth_server port: %v", c.Port)
-
 	jwt, err := utils.InitJwt()
 	if err != nil {
 		log.Fatalf("Failed to initialize JWT: %v", err)
 	}
 
+	// 注册rpc服务
 	s := &server.AuthServer{
 		Svc: service.AuthService{
 			UserSvc: userSvc,

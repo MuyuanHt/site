@@ -49,6 +49,21 @@ type MysqlConf struct {
 	DbName   string `yaml:"dbname"`
 }
 
+// GlobalAppConfig 全局服务配置
+var GlobalAppConfig = &AppConfig{}
+
+// RunningServerName 当前服务名称
+var RunningServerName string
+
+// InitGlobalAppConfig 初始化全局服务配置
+func InitGlobalAppConfig() {
+	var err error
+	GlobalAppConfig, err = LoadAppConf()
+	if err != nil {
+		panic(err)
+	}
+}
+
 // LoadAppConf 加载服务地址配置
 func LoadAppConf() (*AppConfig, error) {
 	var c AppConfig
@@ -115,6 +130,11 @@ func (s *ServiceConf) GetAddress() string {
 		return ""
 	}
 	return fmt.Sprintf("%v:%v", s.Host, s.Port)
+}
+
+// InitRunningServerName 初始化当前正在运行的服务名称
+func (s *ServiceConf) InitRunningServerName() {
+	RunningServerName = s.Name
 }
 
 // GetMysqlDsn 获取 mysql 配置信息

@@ -31,33 +31,11 @@ type AuthJwtClaims struct {
 	jwt.RegisteredClaims
 }
 
-var (
-	priKey  []byte                                                                     // priKey 私钥
-	pubKey  []byte                                                                     // pubKey 公钥
-	letters = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") // letters 用于生成随机字符串
-)
-
-// InitLoadKey 初始化加载密钥
-func InitLoadKey() error {
-	pri, err := conf.LoadPrivateKey()
-	if err != nil {
-		return err
-	}
-	pub, err := conf.LoadPublicKey()
-	if err != nil {
-		return err
-	}
-	priKey = pri
-	pubKey = pub
-	return nil
-}
+// letters 用于生成随机字符串
+var letters = []rune("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
 // InitJwt 初始化 jwt
 func InitJwt() (*JwtWrapper, error) {
-	err := InitLoadKey()
-	if err != nil {
-		return nil, err
-	}
 	issuer, err := conf.GetConfigParam("jwtIssuer")
 	if err != nil {
 		return nil, err
@@ -143,7 +121,7 @@ func (jw *JwtWrapper) ParseTokenRs256(signedToken string) (*AuthJwtClaims, error
 		signedToken,
 		&AuthJwtClaims{},
 		func(token *jwt.Token) (interface{}, error) {
-			pub, err := parsePubKeyBytes(pubKey)
+			pub, err := parsePubKeyBytes(conf.PubKey)
 			if err != nil {
 				log.Printf("Error parsing token error: %v", err)
 				return nil, err
@@ -182,7 +160,7 @@ func (jw *JwtWrapper) GenerateTokenUsingRS256(id int64, account string) (string,
 			ID:        randStr(32),                                                                      // jwt ID, 类似于盐值
 		},
 	}
-	rsaPriKey, err := parsePriKeyBytes(priKey)
+	rsaPriKey, err := parsePriKeyBytes(conf.PriKey)
 	if err != nil {
 		return "", err
 	}

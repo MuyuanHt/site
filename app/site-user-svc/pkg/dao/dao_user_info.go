@@ -59,7 +59,10 @@ func (d *Dao) UpdateUserInfo(id int64, user *models.UserInfo) error {
 // FindUserInfosLikeName 通过用户名模糊查询对应 id
 func (d *Dao) FindUserInfosLikeName(paramName string) ([]*models.IgnoreUserInfo, error) {
 	infos := make([]*models.UserInfo, 0)
-	d.DB.Model(&models.UserInfo{}).Where("username Like ?", fmt.Sprintf("%%%v%%", paramName)).Find(&infos)
+	result := d.DB.Model(&models.UserInfo{}).Where("username LIKE ?", fmt.Sprintf("%%%v%%", paramName)).Find(&infos)
+	if result.Error != nil {
+		return make([]*models.IgnoreUserInfo, 0), result.Error
+	}
 	retInfos := make([]*models.IgnoreUserInfo, 0, len(infos))
 	for _, v := range infos {
 		retInfos = append(retInfos, &models.IgnoreUserInfo{

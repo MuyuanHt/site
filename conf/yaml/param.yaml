@@ -1,15 +1,22 @@
 # 某些参数配置信息 加载后以 map 形式存在于内存中
 # 多个参数使用 # 分割
 
+# 运行环境 使用时屏蔽其中一个
+# appEnv: development # 开发环境
+appEnv: production # 生产环境
+
 # JWT
 jwtGrantScope: read_user_info # 授予范围
 jwtIssuer: Auth_Server # 颁发者
 jwtAudience: web#app # 授予对象
 jwtExpirationHours: 720 # 有效时间 30天
 
-# Select
+# 查询
 queryMaxNumber: 100 # 单次查询最大数量限制
 
-# Default user value
+# 用户默认值
 defaultIconUrl: "https://xxx.xxx.xxx.xxx" # 默认头像
 defaultDescription: "No description yet." # 默认描述
+
+# 日志目录路径
+logFilePath: "./server-log"

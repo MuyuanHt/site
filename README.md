@@ -15,3 +15,4 @@
 - 密码加密：bcrypt
 - 自增uid：go-snowflake
 - 登录认证：jwt-go (rsa 非对称加密)
+- 日志：zap

@@ -209,7 +209,10 @@ func (d *Dao) FindOneUserByUid(uid int64) (*models.Account, error) {
 // FindUsersLikePhone 通过手机模糊查询用户信息
 func (d *Dao) FindUsersLikePhone(paramPhone string) ([]*models.IgnoreAccount, error) {
 	accounts := make([]*models.Account, 0)
-	d.DB.Model(&models.Account{}).Where("phone Like ?", fmt.Sprintf("%%%v%%", paramPhone)).Find(&accounts)
+	result := d.DB.Model(&models.Account{}).Where("phone LIKE ?", fmt.Sprintf("%%%v%%", paramPhone)).Find(&accounts)
+	if result.Error != nil {
+		return make([]*models.IgnoreAccount, 0), result.Error
+	}
 	retAccounts := make([]*models.IgnoreAccount, 0, len(accounts))
 	var info *models.UserInfo
 	var err error
@@ -231,7 +234,10 @@ func (d *Dao) FindUsersLikePhone(paramPhone string) ([]*models.IgnoreAccount, er
 // FindUsersLikeEmail 通过邮箱模糊查询用户信息
 func (d *Dao) FindUsersLikeEmail(paramEmail string) ([]*models.IgnoreAccount, error) {
 	accounts := make([]*models.Account, 0)
-	d.DB.Model(&models.Account{}).Where("email Like ?", fmt.Sprintf("%%%v%%", paramEmail)).Find(&accounts)
+	result := d.DB.Model(&models.Account{}).Where("email LIKE ?", fmt.Sprintf("%%%v%%", paramEmail)).Find(&accounts)
+	if result.Error != nil {
+		return make([]*models.IgnoreAccount, 0), result.Error
+	}
 	retAccounts := make([]*models.IgnoreAccount, 0, len(accounts))
 	var info *models.UserInfo
 	var err error

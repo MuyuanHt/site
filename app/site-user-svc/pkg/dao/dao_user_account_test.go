@@ -2,7 +2,7 @@ package dao
 
 import (
 	"site/app/site-user-svc/pkg/models"
-	"site/common/db"
+	"site/common/dbs"
 	"site/conf"
 	"site/protocol/shared"
 	"testing"
@@ -16,7 +16,7 @@ func initTestDao() *Dao {
 	}
 	dsn := c.GetServiceConf("user").Mysql.GetMysqlDsn()
 	d := &Dao{
-		DB: db.InitMysql(dsn),
+		DB: dbs.InitMysql(dsn),
 	}
 	// 自动迁移
 	_ = d.DB.AutoMigrate(&models.UserInfo{})

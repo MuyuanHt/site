@@ -8,39 +8,38 @@ import (
 	"site/app/site-user-svc/pkg/server"
 	"site/app/site-user-svc/pkg/service"
 	"site/app/site-user-svc/pkg/utils"
+	"site/common/inits"
 	"site/conf"
 	pb "site/protocol/user"
 )
 
 func main() {
-	allConf, err := conf.LoadAppConf()
-	if err != nil {
-		panic(err)
-	}
+	inits.AppInitialize()
+	userConf := conf.GlobalAppConfig.GetServiceConf("user")
+	userConf.InitRunningServerName()
+	inits.ToolInitialize()
 
-	c := allConf.GetServiceConf("user")
-	err = conf.LoadParamConf()
-	if err != nil {
-		panic(err)
-	}
-	dsn := c.Mysql.GetMysqlDsn()
+	// 初始化数据库
+	dsn := userConf.Mysql.GetMysqlDsn()
 	d, err := dao.InitDao(dsn)
 	if err != nil {
-		log.Fatalf("Failed to init dao: %v", err)
+		log.Fatalf("Failed to inits dao: %v", err)
 	}
 
+	// 初始化雪花ID
 	sObj, err := utils.InitSnowflake(2, 2)
 	if err != nil {
-		log.Fatalf("Failed to init snowflke: %v", err)
+		log.Fatalf("Failed to inits snowflke: %v", err)
 	}
 
 	// 服务监听客户端连接端口
-	l, err := net.Listen("tcp", c.GetAddress())
+	l, err := net.Listen("tcp", userConf.GetAddress())
 	if err != nil {
 		log.Fatalf("Failed to listen: %v", err)
 	}
-	log.Printf("User_server port: %v", c.Port)
+	log.Printf("User_server port: %v", userConf.Port)
 
+	// 注册rpc服务
 	s := &server.UserServer{
 		Svc: service.InitUserService(d, sObj),
 	}
