@@ -71,7 +71,8 @@ type FuzzyQueryUsersReqBody struct {
 }
 
 type FuzzyQueryUsersRespBody struct {
-	Users []*FuzzyQueryUsersData `json:"users"`
+	UserNum int                    `json:"user_num"`
+	Users   []*FuzzyQueryUsersData `json:"users"`
 }
 
 // 修改用户隐私权限

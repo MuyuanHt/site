@@ -11,6 +11,8 @@ service CollaborateService{
   rpc DeleteFriend(DeleteFriendReq) returns (DeleteFriendResp){}
   // 修改好友信息
   rpc UpdateFriend(UpdateFriendReq) returns (UpdateFriendResp){}
+  // 查询全部好友
+  rpc FindAllFriends(FindAllFriendsReq) returns (FindAllFriendsResp){}
 }
 
 // 返回的错误信息
@@ -71,4 +73,14 @@ message UpdateFriendReq{
 message UpdateFriendResp{
   RetMsg msg = 1;
   FriendRecordData data = 2;
+}
+
+// 查询全部好友
+message FindAllFriendsReq{
+  int64 uid = 1;
+}
+
+message FindAllFriendsResp{
+  RetMsg msg = 1;
+  repeated FriendRecordData data = 2;
 }

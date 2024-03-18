@@ -20,19 +20,24 @@ func RegisterRoutes(r *gin.Engine, c *conf.ServiceConf, authSvc *auth.ServiceCli
 	rs.Use(a.AuthRequired)
 	// 记录请求日志中间件
 	rs.Use(logger.RecordRequestLog)
+	{
+		// 查询用户信息路由组
+		find := rs.Group("/find")
+		{
+			find.POST("/user", svc.FindOneUser)
+			find.POST("/users", svc.FuzzyQueryUsers)
+		}
 
-	// 查询用户信息路由组
-	find := rs.Group("/find")
-	find.POST("/user", svc.FindOneUser)
-	find.POST("/users", svc.FuzzyQueryUsers)
-
-	// 更新用户信息路由组
-	update := rs.Group("/update")
-	// TODO: 为方便开发期间测试，暂时屏蔽身份验证
-	// update.Use(a.CheckTokenToUser)
-	update.POST("/password", svc.UpdatePassword)
-	update.POST("/userInfo", svc.UpdateUserInfo)
-	update.POST("/userLimit", svc.UpdateUserLimit)
+		// 更新用户信息路由组
+		update := rs.Group("/update")
+		// TODO: 为方便开发期间测试，暂时屏蔽身份验证
+		// update.Use(a.CheckTokenToUser)
+		{
+			update.POST("/password", svc.UpdatePassword)
+			update.POST("/userInfo", svc.UpdateUserInfo)
+			update.POST("/userLimit", svc.UpdateUserLimit)
+		}
+	}
 }
 
 func (svc *ServiceClient) FindOneUser(ctx *gin.Context) {

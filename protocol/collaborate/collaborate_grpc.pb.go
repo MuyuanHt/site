@@ -28,6 +28,8 @@ type CollaborateServiceClient interface {
 	DeleteFriend(ctx context.Context, in *DeleteFriendReq, opts ...grpc.CallOption) (*DeleteFriendResp, error)
 	// 修改好友信息
 	UpdateFriend(ctx context.Context, in *UpdateFriendReq, opts ...grpc.CallOption) (*UpdateFriendResp, error)
+	// 查询全部好友
+	FindAllFriends(ctx context.Context, in *FindAllFriendsReq, opts ...grpc.CallOption) (*FindAllFriendsResp, error)
 }
 
 type collaborateServiceClient struct {
@@ -65,6 +67,15 @@ func (c *collaborateServiceClient) UpdateFriend(ctx context.Context, in *UpdateF
 	return out, nil
 }
 
+func (c *collaborateServiceClient) FindAllFriends(ctx context.Context, in *FindAllFriendsReq, opts ...grpc.CallOption) (*FindAllFriendsResp, error) {
+	out := new(FindAllFriendsResp)
+	err := c.cc.Invoke(ctx, "/collaborate.CollaborateService/FindAllFriends", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CollaborateServiceServer is the server API for CollaborateService service.
 // All implementations must embed UnimplementedCollaborateServiceServer
 // for forward compatibility
@@ -75,6 +86,8 @@ type CollaborateServiceServer interface {
 	DeleteFriend(context.Context, *DeleteFriendReq) (*DeleteFriendResp, error)
 	// 修改好友信息
 	UpdateFriend(context.Context, *UpdateFriendReq) (*UpdateFriendResp, error)
+	// 查询全部好友
+	FindAllFriends(context.Context, *FindAllFriendsReq) (*FindAllFriendsResp, error)
 	mustEmbedUnimplementedCollaborateServiceServer()
 }
 
@@ -90,6 +103,9 @@ func (UnimplementedCollaborateServiceServer) DeleteFriend(context.Context, *Dele
 }
 func (UnimplementedCollaborateServiceServer) UpdateFriend(context.Context, *UpdateFriendReq) (*UpdateFriendResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateFriend not implemented")
+}
+func (UnimplementedCollaborateServiceServer) FindAllFriends(context.Context, *FindAllFriendsReq) (*FindAllFriendsResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindAllFriends not implemented")
 }
 func (UnimplementedCollaborateServiceServer) mustEmbedUnimplementedCollaborateServiceServer() {}
 
@@ -158,6 +174,24 @@ func _CollaborateService_UpdateFriend_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CollaborateService_FindAllFriends_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindAllFriendsReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CollaborateServiceServer).FindAllFriends(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/collaborate.CollaborateService/FindAllFriends",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CollaborateServiceServer).FindAllFriends(ctx, req.(*FindAllFriendsReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CollaborateService_ServiceDesc is the grpc.ServiceDesc for CollaborateService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -176,6 +210,10 @@ var CollaborateService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateFriend",
 			Handler:    _CollaborateService_UpdateFriend_Handler,
+		},
+		{
+			MethodName: "FindAllFriends",
+			Handler:    _CollaborateService_FindAllFriends_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

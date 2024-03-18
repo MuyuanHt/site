@@ -42,6 +42,7 @@ const (
 	CreateGroupError        = 10607 // 创建群组失败
 	DeleteGroupError        = 10608 // 解散群组失败
 	ExistsFriendOrGroup     = 10609 // 已经添加好友或加入群组
+	AddYourselfError        = 10610 // 无法添加自己为好友
 )
 
 var resultCodeText = map[int]string{
@@ -85,6 +86,7 @@ var resultCodeText = map[int]string{
 	CreateGroupError:        "创建群组失败",
 	DeleteGroupError:        "解散群组失败",
 	ExistsFriendOrGroup:     "已经添加好友或加入群组",
+	AddYourselfError:        "无法添加自己为好友",
 }
 
 // CodeMessage 获取 code 对应的 message

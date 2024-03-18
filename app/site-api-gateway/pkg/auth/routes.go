@@ -13,8 +13,10 @@ func RegisterRoutes(r *gin.Engine, c *conf.ServiceConf) *ServiceClient {
 	}
 
 	rs := r.Group("/auth")
-	rs.POST("/register", svc.Register)
-	rs.POST("/login", svc.Login)
+	{
+		rs.POST("/register", svc.Register)
+		rs.POST("/login", svc.Login)
+	}
 	return svc
 }
 

@@ -28,7 +28,7 @@ type DelFriendRespBody struct {
 
 // 更新好友信息 =================================================================
 
-type UpdateFriendInfoReq struct {
+type UpdateFriendInfoReqBody struct {
 	Uid      string `json:"uid"`
 	FriendId string `json:"friend_id"`
 	IsTop    bool   `json:"is_top"`
@@ -36,10 +36,28 @@ type UpdateFriendInfoReq struct {
 	Label    string `json:"label"`
 }
 
-type UpdateFriendInfoResp struct {
+type UpdateFriendInfoRespBody struct {
 	Uid      string `json:"uid"`
 	FriendId string `json:"friend_id"`
 	IsTop    bool   `json:"is_top"`
 	IsBlack  bool   `json:"is_black"`
 	Label    string `json:"label"`
+}
+
+// 查询全部好友
+
+type FriendData struct {
+	FriendId string `json:"friend_id"`
+	IsTop    bool   `json:"is_top"`
+	IsBlack  bool   `json:"is_black"`
+	Label    string `json:"label"`
+}
+
+type FindAllFriendsReqBody struct {
+	Uid string `json:"uid"`
+}
+
+type FindAllFriendsRespBody struct {
+	FriendNum int           `json:"friend_num"`
+	Friends   []*FriendData `json:"friends"`
 }

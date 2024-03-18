@@ -100,7 +100,7 @@ func TestDao_UpdateFriendInfo(t *testing.T) {
 func TestDao_FindUserAllFriend(t *testing.T) {
 	d := initTestDao()
 	uid := int64(123)
-	friends, err := d.FindUserAllFriend(uid)
+	friends, err := d.FindUserAllFriends(uid)
 	if err != nil {
 		t.Errorf("Find all friends err: %v", err)
 		return

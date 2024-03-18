@@ -33,6 +33,10 @@ func (s *FriendService) FindUserOneFriend(userId int64, friendId int64) (*models
 
 // AddFriend 添加好友
 func (s *FriendService) AddFriend(userId int64, friendId int64, userLabel string, friendLabel string) error {
+	// 无法添加自己
+	if userId == friendId {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.AddYourselfError))
+	}
 	// 创建记录前先检查有无记录
 	_, _, err := s.D.FindIsFriend(userId, friendId)
 	if err == nil {
@@ -119,4 +123,13 @@ func (s *FriendService) UpdateFriendInfo(friendInfo *models.UserFriend) (*models
 		return nil, err
 	}
 	return f, nil
+}
+
+// FindAllFriends 查询全部好友
+func (s *FriendService) FindAllFriends(uid int64) ([]*models.UserFriend, error) {
+	friends, err := s.D.FindUserAllFriends(uid)
+	if err != nil {
+		return make([]*models.UserFriend, 0), err
+	}
+	return friends, nil
 }

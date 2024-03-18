@@ -118,8 +118,8 @@ func (d *Dao) UpdateFriendInfo(friend *models.UserFriend) error {
 	return result.Error
 }
 
-// FindUserAllFriend 查找用户所有好友
-func (d *Dao) FindUserAllFriend(uid int64) ([]*models.UserFriend, error) {
+// FindUserAllFriends 查找用户所有好友
+func (d *Dao) FindUserAllFriends(uid int64) ([]*models.UserFriend, error) {
 	friends := make([]*models.UserFriend, 0)
 	result := d.DB.Model(&models.UserFriend{}).Where("user_id=?", uid).Find(&friends)
 	if result.Error != nil {

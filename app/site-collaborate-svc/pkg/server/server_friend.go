@@ -105,3 +105,41 @@ func (s *CollaborateServer) UpdateFriend(ctx context.Context, req *collaborate.U
 		},
 	}, nil
 }
+
+// FindAllFriends 查询全部好友
+func (s *CollaborateServer) FindAllFriends(ctx context.Context, req *collaborate.FindAllFriendsReq) (*collaborate.FindAllFriendsResp, error) {
+	if req == nil {
+		return &collaborate.FindAllFriendsResp{
+			Msg: &collaborate.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
+	friends, err := s.FriendSvc.FindAllFriends(req.Uid)
+	if err != nil {
+		return &collaborate.FindAllFriendsResp{
+			Msg: &collaborate.RetMsg{
+				Status: http.StatusNotFound,
+				Error:  err.Error(),
+			},
+		}, nil
+	}
+	data := make([]*collaborate.FriendRecordData, 0, len(friends))
+	for _, f := range friends {
+		data = append(data, &collaborate.FriendRecordData{
+			UserId:   f.UserId,
+			FriendId: f.FriendId,
+			IsTop:    f.IsTop,
+			IsBlack:  f.IsBlack,
+			Label:    f.Label,
+		})
+	}
+
+	return &collaborate.FindAllFriendsResp{
+		Msg: &collaborate.RetMsg{
+			Status: http.StatusOK,
+		},
+		Data: data,
+	}, nil
+}

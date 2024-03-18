@@ -91,7 +91,8 @@ func FuzzyQueryUsers(ctx *gin.Context, c pb.UserServiceClient) {
 		})
 	}
 	data := api.FuzzyQueryUsersRespBody{
-		Users: users,
+		UserNum: len(users),
+		Users:   users,
 	}
 	middleware.OkWithData(ctx, data)
 }

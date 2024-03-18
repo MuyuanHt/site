@@ -20,11 +20,22 @@ func RegisterRoutes(r *gin.Engine, c *conf.ServiceConf, authSvc *auth.ServiceCli
 	rs.Use(a.AuthRequired)
 	// 记录请求日志中间件
 	rs.Use(logger.RecordRequestLog)
-	// 用户关系路由组
-	friend := rs.Group("/friend")
-	friend.POST("/add", svc.AddFriend)
-	friend.POST("/delete", svc.DeleteFriend)
-	friend.POST("/update", svc.UpdateFriend)
+	{
+		// 用户关系路由组
+		friend := rs.Group("/friend")
+		{
+			friend.POST("/add", svc.AddFriend)
+			friend.POST("/delete", svc.DeleteFriend)
+			friend.POST("/update", svc.UpdateFriend)
+			find := friend.Group("/friends")
+			{
+				find.POST("", svc.FindAllFriends)
+				find.POST("/", svc.FindAllFriends)
+				find.POST("/:option", svc.FindAllFriends) // /top 筛选置顶 /black 筛选黑名单
+			}
+		}
+	}
+
 }
 
 func (svc *ServiceClient) AddFriend(ctx *gin.Context) {
@@ -37,4 +48,8 @@ func (svc *ServiceClient) DeleteFriend(ctx *gin.Context) {
 
 func (svc *ServiceClient) UpdateFriend(ctx *gin.Context) {
 	routers.UpdateFriend(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) FindAllFriends(ctx *gin.Context) {
+	routers.FindAllFriends(ctx, svc.Client)
 }
