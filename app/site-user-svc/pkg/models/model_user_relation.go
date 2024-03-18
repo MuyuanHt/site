@@ -17,6 +17,8 @@ type UserRelation struct {
 	GroupNum       int32 `gorm:"group_num"`        // 全部群组数量
 	OwnerGroupNum  int32 `gorm:"owner_group_num"`  // 创建群组数量
 	AdminGroupNum  int32 `gorm:"admin_group_num"`  // 管理群组数量
+	TopGroupNum    int32 `gorm:"top_group_num"`    // 置顶群组数量
+	BlackGroupNum  int32 `gorm:"black_group_num"`  // 拉黑群组数量
 }
 
 // UserLimit 用户隐私权限 用于修改访问权限时使用
@@ -28,10 +30,12 @@ type UserLimit struct {
 
 // UserRelationNum 用户关系数量 用于修改用户关系数量使用
 type UserRelationNum struct {
-	FriendNum      int32 `gorm:"friend_num"`       // 全部好友数量
-	TopFriendNum   int32 `gorm:"top_friend_num"`   // 置顶好友数量
-	BlackFriendNum int32 `gorm:"black_friend_num"` // 拉黑好友数量
-	GroupNum       int32 `gorm:"group_num"`        // 全部群组数量
-	OwnerGroupNum  int32 `gorm:"owner_group_num"`  // 创建群组数量
-	AdminGroupNum  int32 `gorm:"admin_group_num"`  // 管理群组数量
+	FriendNum      int32 `json:"friend_num"`       // 全部好友数量
+	TopFriendNum   int32 `json:"top_friend_num"`   // 置顶好友数量
+	BlackFriendNum int32 `json:"black_friend_num"` // 拉黑好友数量
+	GroupNum       int32 `json:"group_num"`        // 全部群组数量
+	OwnerGroupNum  int32 `json:"owner_group_num"`  // 创建群组数量
+	AdminGroupNum  int32 `json:"admin_group_num"`  // 管理群组数量
+	TopGroupNum    int32 `json:"top_group_num"`    // 置顶群组数量
+	BlackGroupNum  int32 `json:"black_group_num"`  // 拉黑群组数量
 }

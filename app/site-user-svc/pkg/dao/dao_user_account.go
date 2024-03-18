@@ -34,6 +34,9 @@ func (d *Dao) FindOneAccountById(id int64) (*models.Account, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	if a.ID == 0 {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.RecordNotFound))
+	}
 	return &a, nil
 }
 
@@ -43,6 +46,9 @@ func (d *Dao) FindOneAccountByUid(uid int64) (*models.Account, error) {
 	result := d.DB.Where(&models.Account{Uid: uid}).First(&a)
 	if result.Error != nil {
 		return nil, result.Error
+	}
+	if a.ID == 0 {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.RecordNotFound))
 	}
 	return &a, nil
 }
@@ -54,6 +60,9 @@ func (d *Dao) FindOneAccountByPhone(phone string) (*models.Account, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	if a.ID == 0 {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.RecordNotFound))
+	}
 	return &a, nil
 }
 
@@ -64,6 +73,9 @@ func (d *Dao) FindOneAccountByEmail(email string) (*models.Account, error) {
 	if result.Error != nil {
 		return nil, result.Error
 	}
+	if a.ID == 0 {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.RecordNotFound))
+	}
 	return &a, nil
 }
 
@@ -73,6 +85,9 @@ func (d *Dao) FindOneAccountByUserId(userId uint) (*models.Account, error) {
 	result := d.DB.Where(&models.Account{UserId: userId}).First(&a)
 	if result.Error != nil {
 		return nil, result.Error
+	}
+	if a.ID == 0 {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.RecordNotFound))
 	}
 	return &a, nil
 }
@@ -137,12 +152,12 @@ func (d *Dao) FindOneAccountByAccount(accountType int, account string) (*models.
 	var err error
 	switch accountType {
 	case shared.AccountTypeUid:
-		var uid int
-		uid, err = strconv.Atoi(account)
+		var uid int64
+		uid, err = strconv.ParseInt(account, 10, 64)
 		if err != nil {
 			return nil, err
 		}
-		a, err = d.FindOneAccountByUid(int64(uid))
+		a, err = d.FindOneAccountByUid(uid)
 		if err != nil {
 			return nil, err
 		}

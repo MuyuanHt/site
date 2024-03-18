@@ -20,6 +20,7 @@ const (
 	FuzzyQueryError         = 10212 // 未查询到相关用户
 	QueryParamNilError      = 10213 // 查询参数为空
 	UpdateUserRelationError = 10214 // 修改用户关系信息失败
+	RecordNotFound          = 10215 // 记录不存在
 	AccountInvalid          = 10401 // 账号无效
 	AccountTypeInvalid      = 10402 // 账号类型无效
 	UnAuthorizedError       = 10403 // 账号未授权
@@ -32,6 +33,15 @@ const (
 	TimeInvalid             = 10451 // 时间无效
 	ConfNotFound            = 10452 // 无配置信息
 	HashPwdError            = 10453 // 生成密码失败
+	AddError                = 10601 // 添加用户或加入群组失败
+	DeleteError             = 10602 // 删除用户或退出群组失败
+	TopError                = 10603 // 置顶会话失败
+	DelTopError             = 10604 // 取消置顶会话失败
+	BlackError              = 10605 // 拉黑失败
+	DelBlackError           = 10606 // 取消拉黑失败
+	CreateGroupError        = 10607 // 创建群组失败
+	DeleteGroupError        = 10608 // 解散群组失败
+	ExistsFriendOrGroup     = 10609 // 已经添加好友或加入群组
 )
 
 var resultCodeText = map[int]string{
@@ -53,6 +63,7 @@ var resultCodeText = map[int]string{
 	FuzzyQueryError:         "未查询到相关用户",
 	QueryParamNilError:      "查询参数为空",
 	UpdateUserRelationError: "修改用户关系信息失败",
+	RecordNotFound:          "记录不存在",
 	AccountInvalid:          "账号无效",
 	AccountTypeInvalid:      "账号类型无效",
 	UnAuthorizedError:       "账号未授权",
@@ -65,6 +76,15 @@ var resultCodeText = map[int]string{
 	TimeInvalid:             "时间无效",
 	ConfNotFound:            "无配置信息",
 	HashPwdError:            "生成密码失败",
+	AddError:                "添加用户或加入群组失败",
+	DeleteError:             "删除用户或退出群组失败",
+	TopError:                "置顶会话失败",
+	DelTopError:             "取消置顶会话失败",
+	BlackError:              "拉黑失败",
+	DelBlackError:           "取消拉黑失败",
+	CreateGroupError:        "创建群组失败",
+	DeleteGroupError:        "解散群组失败",
+	ExistsFriendOrGroup:     "已经添加好友或加入群组",
 }
 
 // CodeMessage 获取 code 对应的 message

@@ -21,6 +21,12 @@ service UserService{
   rpc UpdateLastLoginTime(GeneralReq) returns (GeneralResp) {}
   // 修改用户隐私权限
   rpc UpdateUserLimit(UpdateUserLimitReq) returns (UpdateUserLimitResp){}
+  // 修改用户好友关系数量
+  rpc UpdateUserRelation(UpdateUserRelationReq) returns (UpdateUserRelationResp){}
+
+  // 详细的好友关系操作
+  // 添加或删除好友
+  rpc UpdateUserFriendNum(UpdateUserFriendNumReq) returns (UpdateUserFriendNumResp){}
 }
 
 // 返回的错误信息
@@ -155,3 +161,39 @@ message UpdateUserLimitResp{
   RetMsg msg = 1;
   UserLimitData data = 2;
 }
+
+// 修改用户好友关系
+message UserRelationData{
+  int32 friendNum = 1;
+  int32 topFriendNum = 2;
+  int32 blackFriendNum = 3;
+  int32 groupNum = 4;
+  int32 ownerGroupNum = 5;
+  int32 adminGroupNum = 6;
+  int32 topGroupNum = 7;
+  int32 blackGroupNum = 8;
+}
+
+message UpdateUserRelationReq{
+  int64 uid = 1;
+  // 请求时发送的时偏移量
+  UserRelationData data = 2;
+}
+
+message UpdateUserRelationResp{
+  RetMsg msg = 1;
+  // 响应时回复的是总数量
+  UserRelationData data = 2;
+}
+
+// 添加好友
+message UpdateUserFriendNumReq{
+  int64 userId = 1;
+  int64 friendId = 2;
+  bool delFlag = 3;
+}
+
+message UpdateUserFriendNumResp{
+  RetMsg msg = 1;
+}
+

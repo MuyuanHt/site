@@ -24,4 +24,15 @@
 2-AddLimitN-不可添加
 3-AddLimitAgree-需要验证 默认值
 
+# 关系操作
+1-AddFriendOpt-添加或删除好友
+2-TopFriendOpt-置顶或取消置顶好友友
+3-BlackFriendOpt-拉黑或取消拉黑好友
+4-CreateGroupOpt-创建或解散群聊
+5-AdminGroupOpt-设置或取消群管理员权限
+6-TopGroupOpt-置顶或取消置顶群聊
+7-BlackGroupOpt-拉黑或取消拉黑群聊
+8-JoinGroupOpt-加入或退出群聊
+
+
 # 将这行放在最后一行 并且不要删除这行

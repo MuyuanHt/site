@@ -228,31 +228,3 @@ func (s *UserServer) UpdateLastLoginTime(ctx context.Context, req *user.GeneralR
 		},
 	}, nil
 }
-
-// UpdateUserLimit 修改用户隐私权限
-func (s *UserServer) UpdateUserLimit(ctx context.Context, req *user.UpdateUserLimitReq) (*user.UpdateUserLimitResp, error) {
-	limit := &models.UserLimit{
-		SearchLimit: int8(req.Data.SearchLimit),
-		VisitLimit:  int8(req.Data.VisitLimit),
-		AddLimit:    int8(req.Data.AddLimit),
-	}
-	account, err := s.Svc.UpdateUserLimit(req.Uid, limit)
-	if err != nil {
-		return &user.UpdateUserLimitResp{
-			Msg: &user.RetMsg{
-				Status: http.StatusBadRequest,
-				Error:  err.Error(),
-			},
-		}, nil
-	}
-	return &user.UpdateUserLimitResp{
-		Msg: &user.RetMsg{
-			Status: http.StatusOK,
-		},
-		Data: &user.UserLimitData{
-			SearchLimit: int32(account.UserRelation.SearchLimit),
-			VisitLimit:  int32(account.UserRelation.VisitLimit),
-			AddLimit:    int32(account.UserRelation.AddLimit),
-		},
-	}, nil
-}

@@ -15,7 +15,7 @@ type ServiceClient struct {
 func InitServiceClient(c *conf.ServiceConf) pb.UserServiceClient {
 	cc, err := grpc.Dial(c.GetAddress(), grpc.WithInsecure())
 	if err != nil {
-		log.Printf("Could't connect: %v", err)
+		log.Fatalf("Could't connect: %v", err)
 	}
 
 	return pb.NewUserServiceClient(cc)

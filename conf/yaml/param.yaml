@@ -19,4 +19,8 @@ defaultIconUrl: "https://xxx.xxx.xxx.xxx" # 默认头像
 defaultDescription: "No description yet." # 默认描述
 
 # 日志目录路径
-logFilePath: "./server-log"
+logFilePath: "./server-log" # zap 输出日志路径
+
+# DTM 配置
+dtmHttpServer: "http://localhost:36789/api/dtmsvr" # dtm 服务器
+dtmGrpcServer: "localhost:36790"

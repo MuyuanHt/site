@@ -1,8 +1,10 @@
 package dao
 
 import (
+	"errors"
 	"fmt"
 	"site/app/site-user-svc/pkg/models"
+	"site/protocol/shared"
 )
 
 // CreateUser 插入用户信息
@@ -30,6 +32,9 @@ func (d *Dao) FindUserInfoById(id int64) (*models.UserInfo, error) {
 	result := d.DB.Model(models.UserInfo{}).First(&u, uint(id))
 	if result.Error != nil {
 		return nil, result.Error
+	}
+	if u.ID == 0 {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.RecordNotFound))
 	}
 	return u, nil
 }

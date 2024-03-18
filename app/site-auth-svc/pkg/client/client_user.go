@@ -15,7 +15,7 @@ type UserServiceClient struct {
 func InitUserServiceClient(url string) UserServiceClient {
 	cc, err := grpc.Dial(url, grpc.WithInsecure())
 	if err != nil {
-		log.Printf("Could't connect: %v", err)
+		log.Fatalf("Could't connect: %v", err)
 	}
 	return UserServiceClient{
 		Client: pb.NewUserServiceClient(cc),

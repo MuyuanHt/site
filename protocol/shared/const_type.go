@@ -16,4 +16,12 @@ const (
 	AddLimitY         = 1 // 直接添加
 	AddLimitN         = 2 // 不可添加
 	AddLimitAgree     = 3 // 需要验证 默认值
+	AddFriendOpt      = 1 // 添加或删除好友
+	TopFriendOpt      = 2 // 置顶或取消置顶好友友
+	BlackFriendOpt    = 3 // 拉黑或取消拉黑好友
+	CreateGroupOpt    = 4 // 创建或解散群聊
+	AdminGroupOpt     = 5 // 设置或取消群管理员权限
+	TopGroupOpt       = 6 // 置顶或取消置顶群聊
+	BlackGroupOpt     = 7 // 拉黑或取消拉黑群聊
+	JoinGroupOpt      = 8 // 加入或退出群聊
 )

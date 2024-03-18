@@ -3,3 +3,51 @@ syntax = "proto3";
 package collaborate;
 
 option go_package = "./protocol/collaborate";
+
+service CollaborateService{
+  // 添加好友
+  rpc AddFriend(AddFriendReq) returns (AddFriendResp){}
+  // 删除好友
+  rpc DeleteFriend(DeleteFriendReq) returns (DeleteFriendResp){}
+}
+
+// 返回的错误信息
+message RetMsg{
+  int32 status = 1;
+  string error = 2;
+}
+
+// 通用协议
+message GeneralReq{
+  int64 uid = 1;
+}
+
+message GeneralResp{
+  RetMsg msg = 1;
+}
+
+// 添加好友
+message AddFriendReq{
+  // 发起人id
+  int64 userId = 1;
+  // 被请求添加好友id
+  int64 friendId = 2;
+  // 发起人对好友的备注
+  string userLabel = 3;
+  // 好友对发起人的备注
+  string friendLabel = 4;
+}
+
+message AddFriendResp{
+  RetMsg msg = 1;
+}
+
+// 删除好友
+message DeleteFriendReq{
+  int64 userId = 1;
+  int64 friendId = 2;
+}
+
+message DeleteFriendResp{
+  RetMsg msg = 1;
+}

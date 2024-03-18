@@ -42,6 +42,7 @@
 10212-FuzzyQueryError-未查询到相关用户
 10213-QueryParamNilError-查询参数为空
 10214-UpdateUserRelationError-修改用户关系信息失败
+10215-RecordNotFound-记录不存在
 
 # 账号相关
 10401-AccountInvalid-账号无效
@@ -60,6 +61,17 @@
 10451-TimeInvalid-时间无效
 10452-ConfNotFound-无配置信息
 10453-HashPwdError-生成密码失败
+
+# 关系相关
+10601-AddError-添加用户或加入群组失败
+10602-DeleteError-删除用户或退出群组失败
+10603-TopError-置顶会话失败
+10604-DelTopError-取消置顶会话失败
+10605-BlackError-拉黑失败
+10606-DelBlackError-取消拉黑失败
+10607-CreateGroupError-创建群组失败
+10608-DeleteGroupError-解散群组失败
+10609-ExistsFriendOrGroup-已经添加好友或加入群组
 
 
 

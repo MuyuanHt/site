@@ -38,6 +38,11 @@ type UserServiceClient interface {
 	UpdateLastLoginTime(ctx context.Context, in *GeneralReq, opts ...grpc.CallOption) (*GeneralResp, error)
 	// 修改用户隐私权限
 	UpdateUserLimit(ctx context.Context, in *UpdateUserLimitReq, opts ...grpc.CallOption) (*UpdateUserLimitResp, error)
+	// 修改用户好友关系数量
+	UpdateUserRelation(ctx context.Context, in *UpdateUserRelationReq, opts ...grpc.CallOption) (*UpdateUserRelationResp, error)
+	// 详细的好友关系操作
+	// 添加或删除好友
+	UpdateUserFriendNum(ctx context.Context, in *UpdateUserFriendNumReq, opts ...grpc.CallOption) (*UpdateUserFriendNumResp, error)
 }
 
 type userServiceClient struct {
@@ -120,6 +125,24 @@ func (c *userServiceClient) UpdateUserLimit(ctx context.Context, in *UpdateUserL
 	return out, nil
 }
 
+func (c *userServiceClient) UpdateUserRelation(ctx context.Context, in *UpdateUserRelationReq, opts ...grpc.CallOption) (*UpdateUserRelationResp, error) {
+	out := new(UpdateUserRelationResp)
+	err := c.cc.Invoke(ctx, "/user.UserService/UpdateUserRelation", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) UpdateUserFriendNum(ctx context.Context, in *UpdateUserFriendNumReq, opts ...grpc.CallOption) (*UpdateUserFriendNumResp, error) {
+	out := new(UpdateUserFriendNumResp)
+	err := c.cc.Invoke(ctx, "/user.UserService/UpdateUserFriendNum", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
@@ -140,6 +163,11 @@ type UserServiceServer interface {
 	UpdateLastLoginTime(context.Context, *GeneralReq) (*GeneralResp, error)
 	// 修改用户隐私权限
 	UpdateUserLimit(context.Context, *UpdateUserLimitReq) (*UpdateUserLimitResp, error)
+	// 修改用户好友关系数量
+	UpdateUserRelation(context.Context, *UpdateUserRelationReq) (*UpdateUserRelationResp, error)
+	// 详细的好友关系操作
+	// 添加或删除好友
+	UpdateUserFriendNum(context.Context, *UpdateUserFriendNumReq) (*UpdateUserFriendNumResp, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -170,6 +198,12 @@ func (UnimplementedUserServiceServer) UpdateLastLoginTime(context.Context, *Gene
 }
 func (UnimplementedUserServiceServer) UpdateUserLimit(context.Context, *UpdateUserLimitReq) (*UpdateUserLimitResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserLimit not implemented")
+}
+func (UnimplementedUserServiceServer) UpdateUserRelation(context.Context, *UpdateUserRelationReq) (*UpdateUserRelationResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserRelation not implemented")
+}
+func (UnimplementedUserServiceServer) UpdateUserFriendNum(context.Context, *UpdateUserFriendNumReq) (*UpdateUserFriendNumResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateUserFriendNum not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -328,6 +362,42 @@ func _UserService_UpdateUserLimit_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_UpdateUserRelation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserRelationReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UpdateUserRelation(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.UserService/UpdateUserRelation",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UpdateUserRelation(ctx, req.(*UpdateUserRelationReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_UpdateUserFriendNum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateUserFriendNumReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UpdateUserFriendNum(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/user.UserService/UpdateUserFriendNum",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UpdateUserFriendNum(ctx, req.(*UpdateUserFriendNumReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserService_ServiceDesc is the grpc.ServiceDesc for UserService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -366,6 +436,14 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateUserLimit",
 			Handler:    _UserService_UpdateUserLimit_Handler,
+		},
+		{
+			MethodName: "UpdateUserRelation",
+			Handler:    _UserService_UpdateUserRelation_Handler,
+		},
+		{
+			MethodName: "UpdateUserFriendNum",
+			Handler:    _UserService_UpdateUserFriendNum_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
