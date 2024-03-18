@@ -9,6 +9,8 @@ service CollaborateService{
   rpc AddFriend(AddFriendReq) returns (AddFriendResp){}
   // 删除好友
   rpc DeleteFriend(DeleteFriendReq) returns (DeleteFriendResp){}
+  // 修改好友信息
+  rpc UpdateFriend(UpdateFriendReq) returns (UpdateFriendResp){}
 }
 
 // 返回的错误信息
@@ -24,6 +26,15 @@ message GeneralReq{
 
 message GeneralResp{
   RetMsg msg = 1;
+}
+
+// 好友信息
+message FriendRecordData{
+  int64 userId = 1;
+  int64 friendId = 2;
+  bool isTop = 3;
+  bool isBlack = 4;
+  string label = 5;
 }
 
 // 添加好友
@@ -50,4 +61,14 @@ message DeleteFriendReq{
 
 message DeleteFriendResp{
   RetMsg msg = 1;
+}
+
+// 修改好友信息
+message UpdateFriendReq{
+  FriendRecordData data = 1;
+}
+
+message UpdateFriendResp{
+  RetMsg msg = 1;
+  FriendRecordData data = 2;
 }

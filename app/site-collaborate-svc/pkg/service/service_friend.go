@@ -103,3 +103,20 @@ func (s *FriendService) DeleteFriend(userId int64, friendId int64) error {
 	}
 	return nil
 }
+
+// UpdateFriendInfo 修改好友信息
+func (s *FriendService) UpdateFriendInfo(friendInfo *models.UserFriend) (*models.UserFriend, error) {
+	if friendInfo == nil {
+		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
+	err := s.D.UpdateFriendInfo(friendInfo)
+	if err != nil {
+		return nil, err
+	}
+	f, err := s.FindUserOneFriend(friendInfo.UserId, friendInfo.FriendId)
+	if err != nil {
+		logs.SugarLogger.Warnf("UserId[%v] FriendId[%v] Update friend info but find failed: %v", friendInfo.UserId, friendInfo.FriendId, err)
+		return nil, err
+	}
+	return f, nil
+}

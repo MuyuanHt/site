@@ -4,11 +4,20 @@ import (
 	"context"
 	"net/http"
 	"site/app/site-user-svc/pkg/models"
+	"site/protocol/shared"
 	"site/protocol/user"
 )
 
 // UpdateUserFriendNum 添加好友
 func (s *UserServer) UpdateUserFriendNum(ctx context.Context, req *user.UpdateUserFriendNumReq) (*user.UpdateUserFriendNumResp, error) {
+	if req == nil {
+		return &user.UpdateUserFriendNumResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	err := s.Svc.AddFriendByUid(req.UserId, req.FriendId, req.DelFlag)
 	if err != nil {
 		return &user.UpdateUserFriendNumResp{
@@ -27,6 +36,14 @@ func (s *UserServer) UpdateUserFriendNum(ctx context.Context, req *user.UpdateUs
 
 // UpdateUserLimit 修改用户隐私权限
 func (s *UserServer) UpdateUserLimit(ctx context.Context, req *user.UpdateUserLimitReq) (*user.UpdateUserLimitResp, error) {
+	if req == nil {
+		return &user.UpdateUserLimitResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	limit := &models.UserLimit{
 		SearchLimit: int8(req.Data.SearchLimit),
 		VisitLimit:  int8(req.Data.VisitLimit),
@@ -55,6 +72,14 @@ func (s *UserServer) UpdateUserLimit(ctx context.Context, req *user.UpdateUserLi
 
 // UpdateUserRelation 修改用户关系数量
 func (s *UserServer) UpdateUserRelation(ctx context.Context, req *user.UpdateUserRelationReq) (*user.UpdateUserRelationResp, error) {
+	if req == nil {
+		return &user.UpdateUserRelationResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	deltaRelation := &models.UserRelationNum{
 		FriendNum:      req.Data.FriendNum,
 		TopFriendNum:   req.Data.TopFriendNum,

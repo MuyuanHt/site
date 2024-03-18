@@ -9,6 +9,9 @@ import (
 
 // CreateUser 插入用户信息
 func (d *Dao) CreateUser(info *models.UserInfo) error {
+	if info == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	tx := d.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -41,6 +44,9 @@ func (d *Dao) FindUserInfoById(id int64) (*models.UserInfo, error) {
 
 // UpdateUserInfo 修改用户信息
 func (d *Dao) UpdateUserInfo(id int64, user *models.UserInfo) error {
+	if user == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	info, err := d.FindUserInfoById(id)
 	if err != nil {
 		return err

@@ -8,6 +8,9 @@ import (
 
 // CreateRelation 插入用户关系信息
 func (d *Dao) CreateRelation(relation *models.UserRelation) error {
+	if relation == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	tx := d.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -79,6 +82,9 @@ func (d *Dao) AddFriendById(id1 int64, id2 int64, delFlag bool) error {
 
 // UpdateUserRelation 修改用户关系信息
 func (d *Dao) UpdateUserRelation(id int64, relation *models.UserRelation) error {
+	if relation == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	r, err := d.FindRelationById(id)
 	if err != nil {
 		return err
@@ -104,6 +110,9 @@ func (d *Dao) UpdateUserRelation(id int64, relation *models.UserRelation) error 
 // SagaAdjustUserRelation DTM 处理 saga 事务修改用户关系信息
 // 仅修改用户好友等相关数量 不修改隐私权限 传入参数为偏移量
 func (d *Dao) SagaAdjustUserRelation(id int64, deltaRelation *models.UserRelation) error {
+	if deltaRelation == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	r, err := d.FindRelationById(id)
 	if err != nil {
 		return err

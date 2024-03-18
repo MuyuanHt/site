@@ -18,6 +18,14 @@ type UserServer struct {
 
 // FindOneUser 查询一个用户
 func (s *UserServer) FindOneUser(ctx context.Context, req *user.FindOneUserReq) (*user.FindOneUserResp, error) {
+	if req == nil {
+		return &user.FindOneUserResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	userInfo, err := s.Svc.FindOneUserByAccount(req.AccountType, req.Account)
 	if userInfo == nil || err != nil {
 		return &user.FindOneUserResp{
@@ -52,6 +60,14 @@ func (s *UserServer) FindOneUser(ctx context.Context, req *user.FindOneUserReq) 
 
 // FindAccount 查询账户信息
 func (s *UserServer) FindAccount(ctx context.Context, req *user.FindAccountReq) (*user.FindAccountResp, error) {
+	if req == nil {
+		return &user.FindAccountResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	userInfo, err := s.Svc.FindOneUserByAccount(req.AccountType, req.Account)
 	if userInfo == nil || err != nil {
 		return &user.FindAccountResp{
@@ -76,6 +92,14 @@ func (s *UserServer) FindAccount(ctx context.Context, req *user.FindAccountReq) 
 
 // CreateUser 创建用户
 func (s *UserServer) CreateUser(ctx context.Context, req *user.CreateUserReq) (*user.CreateUserResp, error) {
+	if req == nil {
+		return &user.CreateUserResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	userInfo, err := s.Svc.CreateOneUser(req.AccountType, req.Account, req.Password)
 	if err != nil {
 		return &user.CreateUserResp{
@@ -110,6 +134,14 @@ func (s *UserServer) CreateUser(ctx context.Context, req *user.CreateUserReq) (*
 
 // UpdatePassword 修改密码
 func (s *UserServer) UpdatePassword(ctx context.Context, req *user.UpdatePasswordReq) (*user.UpdatePasswordResp, error) {
+	if req == nil {
+		return &user.UpdatePasswordResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	ok, err := s.Svc.UpdatePassword(req.Uid, req.OldPassword, req.NewPassword)
 	if err != nil {
 		return &user.UpdatePasswordResp{
@@ -130,6 +162,14 @@ func (s *UserServer) UpdatePassword(ctx context.Context, req *user.UpdatePasswor
 // UpdateUserInfo 修改用户信息
 // TODO: 修改用户信息后自动更新二维码
 func (s *UserServer) UpdateUserInfo(ctx context.Context, req *user.ChangeUserInfoReq) (*user.ChangeUserInfoResp, error) {
+	if req == nil {
+		return &user.ChangeUserInfoResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	birthdayTime, err := tools.Int64ToTime(req.Data.Birthday)
 	if err != nil {
 		return &user.ChangeUserInfoResp{
@@ -182,6 +222,14 @@ func (s *UserServer) UpdateUserInfo(ctx context.Context, req *user.ChangeUserInf
 
 // FuzzyQueryUsers 模糊查询用户信息
 func (s *UserServer) FuzzyQueryUsers(ctx context.Context, req *user.FuzzyQueryUsersReq) (*user.FuzzyQueryUsersResp, error) {
+	if req == nil {
+		return &user.FuzzyQueryUsersResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	accounts, err := s.Svc.FuzzyQueryUsers(req.Param)
 	if err != nil {
 		return &user.FuzzyQueryUsersResp{
@@ -210,6 +258,14 @@ func (s *UserServer) FuzzyQueryUsers(ctx context.Context, req *user.FuzzyQueryUs
 
 // UpdateLastLoginTime 修改最后登陆时间
 func (s *UserServer) UpdateLastLoginTime(ctx context.Context, req *user.GeneralReq) (*user.GeneralResp, error) {
+	if req == nil {
+		return &user.GeneralResp{
+			Msg: &user.RetMsg{
+				Status: http.StatusBadRequest,
+				Error:  shared.CodeMessageIgnoreCode(shared.ParamError),
+			},
+		}, nil
+	}
 	info := &models.UserInfo{
 		LastLoginTime: time.Now(),
 	}

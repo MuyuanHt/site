@@ -8,6 +8,9 @@ import (
 
 // CreateBecomeFriend 成为好友时创建两条记录
 func (d *Dao) CreateBecomeFriend(user1 *models.UserFriend, user2 *models.UserFriend) error {
+	if user1 == nil || user2 == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	tx := d.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
@@ -101,6 +104,9 @@ func (d *Dao) DeleteFriendRecord(uid1 int64, uid2 int64) error {
 
 // UpdateFriendInfo 更新某条好友记录
 func (d *Dao) UpdateFriendInfo(friend *models.UserFriend) error {
+	if friend == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	f, err := d.FindFriendRecord(friend.UserId, friend.FriendId)
 	if err != nil {
 		return err

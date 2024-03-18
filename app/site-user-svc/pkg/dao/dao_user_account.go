@@ -10,6 +10,9 @@ import (
 
 // CreateAccount 插入单条账户记录
 func (d *Dao) CreateAccount(account *models.Account) error {
+	if account == nil {
+		return errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
+	}
 	tx := d.DB.Begin()
 	defer func() {
 		if r := recover(); r != nil {
