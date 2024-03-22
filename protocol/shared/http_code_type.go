@@ -43,6 +43,9 @@ const (
 	DeleteGroupError        = 10608 // 解散群组失败
 	ExistsFriendOrGroup     = 10609 // 已经添加好友或加入群组
 	AddYourselfError        = 10610 // 无法添加自己为好友
+	TagExists               = 10630 // 标签已存在或名称重复
+	TagRelationExist        = 10631 // 已与标签关联
+	TagRelationNotExist     = 10632 // 未与标签关联
 )
 
 var resultCodeText = map[int]string{
@@ -87,6 +90,9 @@ var resultCodeText = map[int]string{
 	DeleteGroupError:        "解散群组失败",
 	ExistsFriendOrGroup:     "已经添加好友或加入群组",
 	AddYourselfError:        "无法添加自己为好友",
+	TagExists:               "标签已存在或名称重复",
+	TagRelationExist:        "已与标签关联",
+	TagRelationNotExist:     "未与标签关联",
 }
 
 // CodeMessage 获取 code 对应的 message

@@ -26,6 +26,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to inits dao: %v", err)
 	}
+	defer d.Close()
 
 	// 服务监听客户端连接端口
 	l, err := net.Listen("tcp", teamConf.GetAddress())

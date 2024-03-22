@@ -125,9 +125,9 @@ func (s *FriendService) UpdateFriendInfo(friendInfo *models.UserFriend) (*models
 	return f, nil
 }
 
-// FindAllFriends 查询全部好友
-func (s *FriendService) FindAllFriends(uid int64) ([]*models.UserFriend, error) {
-	friends, err := s.D.FindUserAllFriends(uid)
+// FindAllFriends 根据筛选条件查询用户好友
+func (s *FriendService) FindAllFriends(uid int64, opt int) ([]*models.UserFriend, error) {
+	friends, err := s.D.FindUserAllFriends(uid, opt)
 	if err != nil {
 		return make([]*models.UserFriend, 0), err
 	}

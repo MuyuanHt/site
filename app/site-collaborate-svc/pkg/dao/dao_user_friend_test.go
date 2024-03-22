@@ -4,11 +4,12 @@ import (
 	"site/app/site-collaborate-svc/pkg/models"
 	"site/common/dbs"
 	"site/conf"
+	"site/protocol/shared"
 	"testing"
 )
 
 // 测试时连接数据库使用
-func initTestDao() *Dao {
+func initTestFriendDao() *Dao {
 	c, err := conf.LoadAppConf()
 	if err != nil {
 		panic(err)
@@ -34,7 +35,7 @@ func initTestTempFriend() *models.UserFriend {
 }
 
 func TestDao_CreateBecomeFriend(t *testing.T) {
-	d := initTestDao()
+	d := initTestFriendDao()
 	u1 := initTestTempFriend()
 	u1.UserId = 123
 	u1.FriendId = 237
@@ -48,7 +49,7 @@ func TestDao_CreateBecomeFriend(t *testing.T) {
 }
 
 func TestDao_FindFriendRecord(t *testing.T) {
-	d := initTestDao()
+	d := initTestFriendDao()
 	uid1 := int64(123)
 	uid2 := int64(234)
 	f, err := d.FindFriendRecord(uid1, uid2)
@@ -60,7 +61,7 @@ func TestDao_FindFriendRecord(t *testing.T) {
 }
 
 func TestDao_FindIsFriend(t *testing.T) {
-	d := initTestDao()
+	d := initTestFriendDao()
 	uid1 := int64(123)
 	uid2 := int64(234)
 	f1, f2, err := d.FindIsFriend(uid1, uid2)
@@ -73,7 +74,7 @@ func TestDao_FindIsFriend(t *testing.T) {
 }
 
 func TestDao_DeleteFriendRecord(t *testing.T) {
-	d := initTestDao()
+	d := initTestFriendDao()
 	uid1 := int64(123)
 	uid2 := int64(234)
 	err := d.DeleteFriendRecord(uid1, uid2)
@@ -83,7 +84,7 @@ func TestDao_DeleteFriendRecord(t *testing.T) {
 }
 
 func TestDao_UpdateFriendInfo(t *testing.T) {
-	d := initTestDao()
+	d := initTestFriendDao()
 	info := &models.UserFriend{
 		UserId:   123,
 		FriendId: 236,
@@ -98,9 +99,10 @@ func TestDao_UpdateFriendInfo(t *testing.T) {
 }
 
 func TestDao_FindUserAllFriend(t *testing.T) {
-	d := initTestDao()
+	d := initTestFriendDao()
 	uid := int64(123)
-	friends, err := d.FindUserAllFriends(uid)
+	opt := shared.FindAllOpt
+	friends, err := d.FindUserAllFriends(uid, opt)
 	if err != nil {
 		t.Errorf("Find all friends err: %v", err)
 		return

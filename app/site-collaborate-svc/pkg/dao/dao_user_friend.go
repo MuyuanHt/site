@@ -118,10 +118,17 @@ func (d *Dao) UpdateFriendInfo(friend *models.UserFriend) error {
 	return result.Error
 }
 
-// FindUserAllFriends 查找用户所有好友
-func (d *Dao) FindUserAllFriends(uid int64) ([]*models.UserFriend, error) {
+// FindUserAllFriends 查找用户所有好友 opt 选择查询条件 是否置顶/拉黑
+func (d *Dao) FindUserAllFriends(uid int64, opt int) ([]*models.UserFriend, error) {
 	friends := make([]*models.UserFriend, 0)
-	result := d.DB.Model(&models.UserFriend{}).Where("user_id=?", uid).Find(&friends)
+	query := d.DB.Model(&models.UserFriend{}).Where("user_id=?", uid)
+	switch opt {
+	case shared.FindTopOpt:
+		query = query.Where("is_top=?", true)
+	case shared.FindBlackOpt:
+		query = query.Where("is_black=?", true)
+	}
+	result := query.Find(&friends)
 	if result.Error != nil {
 		return friends, result.Error
 	}

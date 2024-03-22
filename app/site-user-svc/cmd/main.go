@@ -25,6 +25,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to inits dao: %v", err)
 	}
+	defer d.Close()
 
 	// 初始化雪花ID
 	sObj, err := utils.InitSnowflake(2, 2)

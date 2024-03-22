@@ -27,12 +27,7 @@ func RegisterRoutes(r *gin.Engine, c *conf.ServiceConf, authSvc *auth.ServiceCli
 			friend.POST("/add", svc.AddFriend)
 			friend.POST("/delete", svc.DeleteFriend)
 			friend.POST("/update", svc.UpdateFriend)
-			find := friend.Group("/friends")
-			{
-				find.POST("", svc.FindAllFriends)
-				find.POST("/", svc.FindAllFriends)
-				find.POST("/:option", svc.FindAllFriends) // /top 筛选置顶 /black 筛选黑名单
-			}
+			friend.POST("/find", svc.FindAllFriends)
 		}
 	}
 

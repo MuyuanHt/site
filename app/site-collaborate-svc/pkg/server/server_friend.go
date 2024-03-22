@@ -116,7 +116,7 @@ func (s *CollaborateServer) FindAllFriends(ctx context.Context, req *collaborate
 			},
 		}, nil
 	}
-	friends, err := s.FriendSvc.FindAllFriends(req.Uid)
+	friends, err := s.FriendSvc.FindAllFriends(req.Uid, int(req.Opt))
 	if err != nil {
 		return &collaborate.FindAllFriendsResp{
 			Msg: &collaborate.RetMsg{

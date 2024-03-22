@@ -34,5 +34,15 @@
 7-BlackGroupOpt-拉黑或取消拉黑群聊
 8-JoinGroupOpt-加入或退出群聊
 
+# 标签类型
+1-TagTypeGroup-群组标签
+2-TagTypeTeam-团队标签
+3-TagTypeItem-任务标签
+4-TagTypeArticle-文章标签
+
+# 查询时筛选条件
+1-FindAllOpt-查询全部
+2-FindTopOpt-查询置顶
+3-FindBlackOpt-查询拉黑
 
 # 将这行放在最后一行 并且不要删除这行

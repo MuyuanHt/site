@@ -55,6 +55,7 @@ type FriendData struct {
 
 type FindAllFriendsReqBody struct {
 	Uid string `json:"uid"`
+	Opt int    `json:"opt"` // 筛选条件 1-全部好友 2-置顶好友 3-拉黑用户
 }
 
 type FindAllFriendsRespBody struct {

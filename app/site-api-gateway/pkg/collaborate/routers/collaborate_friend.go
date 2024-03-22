@@ -49,7 +49,7 @@ func AddFriend(ctx *gin.Context, c pb.CollaborateServiceClient) {
 	middleware.OkWithData(ctx, data)
 }
 
-// DeleteFriend 添加好友
+// DeleteFriend 删除好友
 func DeleteFriend(ctx *gin.Context, c pb.CollaborateServiceClient) {
 	body := api.DelFriendReqBody{}
 	if err := ctx.BindJSON(&body); err != nil {
@@ -85,7 +85,7 @@ func DeleteFriend(ctx *gin.Context, c pb.CollaborateServiceClient) {
 	middleware.OkWithData(ctx, data)
 }
 
-// UpdateFriend 更新好友信息
+// UpdateFriend 查询好友信息
 func UpdateFriend(ctx *gin.Context, c pb.CollaborateServiceClient) {
 	body := api.UpdateFriendInfoReqBody{}
 	if err := ctx.BindJSON(&body); err != nil {
@@ -129,9 +129,8 @@ func UpdateFriend(ctx *gin.Context, c pb.CollaborateServiceClient) {
 	middleware.OkWithData(ctx, data)
 }
 
-// FindAllFriends 更新好友信息
+// FindAllFriends 查询好友信息
 func FindAllFriends(ctx *gin.Context, c pb.CollaborateServiceClient) {
-	option := ctx.Param("option") // 用于筛选置顶或拉黑等条件
 	body := api.FindAllFriendsReqBody{}
 	if err := ctx.BindJSON(&body); err != nil {
 		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ParseParamError))
@@ -144,6 +143,7 @@ func FindAllFriends(ctx *gin.Context, c pb.CollaborateServiceClient) {
 	}
 	res, err := c.FindAllFriends(ctx, &pb.FindAllFriendsReq{
 		Uid: uid,
+		Opt: int32(body.Opt),
 	})
 	if err != nil {
 		middleware.Fail(ctx, http.StatusBadRequest, shared.CodeMessageIgnoreCode(shared.ServerError))
@@ -154,37 +154,13 @@ func FindAllFriends(ctx *gin.Context, c pb.CollaborateServiceClient) {
 		return
 	}
 	friends := make([]*api.FriendData, 0, len(res.Data))
-	if option != "top" && option != "black" {
-		for _, v := range res.Data {
-			friends = append(friends, &api.FriendData{
-				FriendId: strconv.FormatInt(v.FriendId, 10),
-				IsTop:    v.IsTop,
-				IsBlack:  v.IsBlack,
-				Label:    v.Label,
-			})
-		}
-	} else if option == "top" {
-		for _, v := range res.Data {
-			if v.IsTop {
-				friends = append(friends, &api.FriendData{
-					FriendId: strconv.FormatInt(v.FriendId, 10),
-					IsTop:    v.IsTop,
-					IsBlack:  v.IsBlack,
-					Label:    v.Label,
-				})
-			}
-		}
-	} else if option == "black" {
-		for _, v := range res.Data {
-			if v.IsBlack {
-				friends = append(friends, &api.FriendData{
-					FriendId: strconv.FormatInt(v.FriendId, 10),
-					IsTop:    v.IsTop,
-					IsBlack:  v.IsBlack,
-					Label:    v.Label,
-				})
-			}
-		}
+	for _, v := range res.Data {
+		friends = append(friends, &api.FriendData{
+			FriendId: strconv.FormatInt(v.FriendId, 10),
+			IsTop:    v.IsTop,
+			IsBlack:  v.IsBlack,
+			Label:    v.Label,
+		})
 	}
 	data := api.FindAllFriendsRespBody{
 		FriendNum: len(friends),

@@ -30,3 +30,8 @@ func InitDao(mysqlDsn string) (*Dao, error) {
 	}
 	return d, nil
 }
+
+// Close 关闭数据库连接
+func (d *Dao) Close() error {
+	return dbs.CloseMysql(d.DB)
+}

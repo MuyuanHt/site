@@ -24,4 +24,11 @@ const (
 	TopGroupOpt       = 6 // 置顶或取消置顶群聊
 	BlackGroupOpt     = 7 // 拉黑或取消拉黑群聊
 	JoinGroupOpt      = 8 // 加入或退出群聊
+	TagTypeGroup      = 1 // 群组标签
+	TagTypeTeam       = 2 // 团队标签
+	TagTypeItem       = 3 // 任务标签
+	TagTypeArticle    = 4 // 文章标签
+	FindAllOpt        = 1 // 查询全部
+	FindTopOpt        = 2 // 查询置顶
+	FindBlackOpt      = 3 // 查询拉黑
 )

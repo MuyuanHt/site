@@ -78,6 +78,7 @@ message UpdateFriendResp{
 // 查询全部好友
 message FindAllFriendsReq{
   int64 uid = 1;
+  int32 opt = 2;
 }
 
 message FindAllFriendsResp{
