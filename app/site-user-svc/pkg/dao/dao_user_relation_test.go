@@ -4,6 +4,7 @@ import "testing"
 
 func TestDao_FindRelationById(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	res, err := d.FindRelationById(3)
 	if err != nil {
 		t.Errorf("FindRelationById failed: %v", err)

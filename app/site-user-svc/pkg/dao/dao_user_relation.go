@@ -89,6 +89,15 @@ func (d *Dao) UpdateUserRelation(id int64, relation *models.UserRelation) error 
 	if err != nil {
 		return err
 	}
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
 	r.SearchLimit = relation.SearchLimit
 	r.VisitLimit = relation.VisitLimit
 	r.AddLimit = relation.AddLimit
@@ -100,11 +109,12 @@ func (d *Dao) UpdateUserRelation(id int64, relation *models.UserRelation) error 
 	r.AdminGroupNum = relation.AdminGroupNum
 	r.TopGroupNum = relation.TopGroupNum
 	r.BlackGroupNum = relation.BlackGroupNum
-	result := d.DB.Save(r)
+	result := tx.Save(r)
 	if result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
-	return nil
+	return tx.Commit().Error
 }
 
 // SagaAdjustUserRelation DTM 处理 saga 事务修改用户关系信息
@@ -117,6 +127,15 @@ func (d *Dao) SagaAdjustUserRelation(id int64, deltaRelation *models.UserRelatio
 	if err != nil {
 		return err
 	}
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err := tx.Error; err != nil {
+		return err
+	}
 	r.FriendNum += deltaRelation.FriendNum
 	r.TopFriendNum += deltaRelation.TopFriendNum
 	r.BlackFriendNum += deltaRelation.BlackFriendNum
@@ -125,9 +144,10 @@ func (d *Dao) SagaAdjustUserRelation(id int64, deltaRelation *models.UserRelatio
 	r.AdminGroupNum += deltaRelation.AdminGroupNum
 	r.TopGroupNum += deltaRelation.TopGroupNum
 	r.BlackGroupNum += deltaRelation.BlackGroupNum
-	result := d.DB.Save(r)
+	result := tx.Save(r)
 	if result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
-	return nil
+	return tx.Commit().Error
 }

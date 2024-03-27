@@ -25,9 +25,9 @@ func RegisterRoutes(r *gin.Engine, c *conf.ServiceConf, authSvc *auth.ServiceCli
 		friend := rs.Group("/friend")
 		{
 			friend.POST("/add", svc.AddFriend)
-			friend.POST("/delete", svc.DeleteFriend)
-			friend.POST("/update", svc.UpdateFriend)
 			friend.POST("/find", svc.FindAllFriends)
+			friend.POST("/update", svc.UpdateFriend)
+			friend.POST("/delete", svc.DeleteFriend)
 		}
 	}
 

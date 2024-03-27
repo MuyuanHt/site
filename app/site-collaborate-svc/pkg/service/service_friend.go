@@ -7,6 +7,7 @@ import (
 	"site/app/site-collaborate-svc/pkg/models"
 	"site/common/logs"
 	"site/protocol/shared"
+	"site/protocol/user"
 )
 
 type FriendService struct {
@@ -68,16 +69,19 @@ func (s *FriendService) AddFriend(userId int64, friendId int64, userLabel string
 	if err != nil {
 		return err
 	}
+	defer func() {
+		if err != nil {
+			err1 := s.D.DeleteFriendRecord(userId, friendId)
+			if err1 != nil {
+				logs.SugarLogger.Errorf("UserId[%v] add friend[%v] record and compensate failed: err[%v]", userId, friendId, err)
+			} else {
+				logs.SugarLogger.Warnf("UserId[%v] add friend[%v] record failed and compensate success!", userId, friendId)
+			}
+		}
+	}()
 	// 添加好友后修改用户关系信息
 	resp, err := s.UserSvc.UpdateUserFriendNum(userId, friendId, false)
-	// 处理失败进行补偿操作
 	if err != nil || resp.Msg.Error != "" || resp.Msg.Status != 200 {
-		err1 := s.D.DeleteFriendRecord(userId, friendId)
-		if err1 != nil {
-			logs.SugarLogger.Errorf("UserId[%v] FriendId[%v] Add friend record and compensate failed: err[%v], err1[%v], msg.error[%v]", userId, friendId, err, err1, resp.Msg.Error)
-			return errors.New(shared.CodeMessageIgnoreCode(shared.AddError))
-		}
-		logs.SugarLogger.Warnf("UserId[%v] FriendId[%v] Add friend record failed: %v, and compensate success!", userId, friendId, err)
 		return errors.New(shared.CodeMessageIgnoreCode(shared.AddError))
 	}
 	return nil
@@ -85,25 +89,24 @@ func (s *FriendService) AddFriend(userId int64, friendId int64, userLabel string
 
 // DeleteFriend 删除好友
 func (s *FriendService) DeleteFriend(userId int64, friendId int64) error {
-	// 修改用户前服务用户关系信息
+	// 修改用户关系信息
 	resp, err := s.UserSvc.UpdateUserFriendNum(userId, friendId, true)
-	// 处理失败时直接 return
 	if err != nil || resp.Msg.Error != "" || resp.Msg.Status != 200 {
 		return errors.New(shared.CodeMessageIgnoreCode(shared.DeleteError))
 	}
+	defer func() {
+		if err != nil {
+			resp1, err1 := s.UserSvc.UpdateUserFriendNum(userId, friendId, false)
+			if err1 != nil || resp1.Msg.Error != "" || resp1.Msg.Status != 200 {
+				logs.SugarLogger.Errorf("UserId[%v] delete friend[%v] record failed and compensate failed: err[%v], msg.error[%v]", userId, friendId, err1, resp1.Msg.Error)
+			} else {
+				logs.SugarLogger.Warnf("UserId[%v] delete friend[%v] record failed and compensate success!", userId, friendId)
+			}
+		}
+	}()
 	err = s.D.DeleteFriendRecord(userId, friendId)
 	if err != nil {
-		// 删除失败时对用户关系信息进行补偿操作
-		resp2, err1 := s.UserSvc.UpdateUserFriendNum(userId, friendId, false)
-		if err1 != nil || resp2.Msg.Error != "" || resp2.Msg.Status != 200 {
-			logs.SugarLogger.Errorf("UserId[%v] FriendId[%v] Delete friend record failed and compensate failed err: err[%v], err1[%v], msg.error[%v]", userId, friendId, err, err1, resp.Msg.Error)
-			return errors.New(shared.CodeMessageIgnoreCode(shared.DeleteError))
-		}
-		logs.SugarLogger.Warnf("UserId[%v] FriendId[%v] Delete friend record failed: %v, and compensate success!", userId, friendId, err)
 		return errors.New(shared.CodeMessageIgnoreCode(shared.DeleteError))
-	}
-	if err != nil {
-		return err
 	}
 	return nil
 }
@@ -113,11 +116,54 @@ func (s *FriendService) UpdateFriendInfo(friendInfo *models.UserFriend) (*models
 	if friendInfo == nil {
 		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.ParamError))
 	}
-	err := s.D.UpdateFriendInfo(friendInfo)
+	// 更新前检查置顶与拉黑信息变化
+	f, err := s.D.FindFriendRecord(friendInfo.UserId, friendInfo.FriendId)
 	if err != nil {
 		return nil, err
 	}
-	f, err := s.FindUserOneFriend(friendInfo.UserId, friendInfo.FriendId)
+	var resp *user.UpdateUserRelationResp
+	if f.IsTop != friendInfo.IsTop {
+		resp, err = s.UserSvc.UpdateUserRelation(friendInfo.UserId, shared.FindTopOpt, friendInfo.IsTop)
+		if err != nil || resp.Msg.Error != "" || resp.Msg.Status != 200 {
+			return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UpdateUserRelationError))
+		}
+		// 错误时补偿
+		defer func() {
+			if err != nil {
+				resp1, err1 := s.UserSvc.UpdateUserRelation(friendInfo.UserId, shared.FindTopOpt, !friendInfo.IsTop)
+				if err1 != nil || resp1.Msg.Error != "" || resp1.Msg.Status != 200 {
+					logs.SugarLogger.Errorf("UserId[%v] update friend[%v] record failed and compensate failed: err[%v], msg.error[%v]", friendInfo.UserId, friendInfo.FriendId, err1, resp1.Msg.Error)
+				}
+			}
+		}()
+	}
+	if f.IsBlack != friendInfo.IsBlack {
+		resp, err = s.UserSvc.UpdateUserRelation(friendInfo.UserId, shared.FindBlackOpt, friendInfo.IsBlack)
+		if err != nil || resp.Msg.Error != "" || resp.Msg.Status != 200 {
+			return nil, errors.New(shared.CodeMessageIgnoreCode(shared.UpdateUserRelationError))
+		}
+		defer func() {
+			if err != nil {
+				resp1, err1 := s.UserSvc.UpdateUserRelation(friendInfo.UserId, shared.FindTopOpt, !friendInfo.IsBlack)
+				if err1 != nil || resp1.Msg.Error != "" || resp1.Msg.Status != 200 {
+					logs.SugarLogger.Errorf("UserId[%v] update friend[%v] record failed and compensate failed: err[%v], msg.error[%v]", friendInfo.UserId, friendInfo.FriendId, err1, resp1.Msg.Error)
+				}
+			}
+		}()
+	}
+	err = s.D.UpdateFriendInfo(friendInfo)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if err != nil {
+			err1 := s.D.UpdateFriendInfo(f)
+			if err1 != nil {
+				logs.SugarLogger.Errorf("UserId[%v] update friend[%v] record failed and compensate failed: err[%v]", friendInfo.UserId, friendInfo.FriendId, err1)
+			}
+		}
+	}()
+	f, err = s.FindUserOneFriend(friendInfo.UserId, friendInfo.FriendId)
 	if err != nil {
 		logs.SugarLogger.Warnf("UserId[%v] FriendId[%v] Update friend info but find failed: %v", friendInfo.UserId, friendInfo.FriendId, err)
 		return nil, err

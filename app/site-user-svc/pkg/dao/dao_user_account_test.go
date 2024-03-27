@@ -24,6 +24,11 @@ func initTestDao() *Dao {
 	return d
 }
 
+// 关闭测试数据库连接
+func closeTestDao(d *Dao) {
+	_ = dbs.CloseMysql(d.DB)
+}
+
 // 测试时为了方便先初始化后根据需要修改字段值
 func initTestTempAccount() *models.Account {
 	return &models.Account{
@@ -47,6 +52,7 @@ func initTestTempAccount() *models.Account {
 
 func TestAccountDao_CreateAccount(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	a := initTestTempAccount()
 	a.Phone = "12345678902"
 	err := d.CreateAccount(a)
@@ -57,6 +63,7 @@ func TestAccountDao_CreateAccount(t *testing.T) {
 
 func TestAccountDao_FindOneAccountByAccount(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	a := initTestTempAccount()
 	a.Phone = "12345678903"
 	a.Email = "123@123.com"
@@ -75,6 +82,7 @@ func TestAccountDao_FindOneAccountByAccount(t *testing.T) {
 
 func TestAccountDao_FindOneUserByAccount(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	a := initTestTempAccount()
 	a.Phone = "12345678916"
 	a.UserInfo.Username = "test_name15"
@@ -94,6 +102,7 @@ func TestAccountDao_FindOneUserByAccount(t *testing.T) {
 
 func TestAccountDao_UnsubscribeById(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	uid := int64(551428958831517696)
 	err := d.UnsubscribeByUId(uid)
 	if err != nil {
@@ -103,6 +112,7 @@ func TestAccountDao_UnsubscribeById(t *testing.T) {
 
 func TestAccountDao_FindUsersLikePhone(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	param := "848"
 	accounts, err := d.FindUsersLikePhone(param)
 	if err != nil {
@@ -116,6 +126,7 @@ func TestAccountDao_FindUsersLikePhone(t *testing.T) {
 
 func TestAccountDao_FindUsersLikeEmail(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	param := "bc"
 	accounts, err := d.FindUsersLikeEmail(param)
 	if err != nil {
@@ -129,6 +140,7 @@ func TestAccountDao_FindUsersLikeEmail(t *testing.T) {
 
 func TestAccountDao_FindUsersLikeName(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	param := "u"
 	accounts, err := d.FindUsersLikeName(param)
 	if err != nil {

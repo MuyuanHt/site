@@ -7,6 +7,7 @@ import (
 
 func TestUpdateUserInfo(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	res, err := d.FindOneUserByAccount(shared.AccountTypePhone, "17334394823")
 	if err != nil {
 		t.Errorf("Error getting user: %v", err)
@@ -22,6 +23,7 @@ func TestUpdateUserInfo(t *testing.T) {
 
 func TestDao_FindUserInfosLikeName(t *testing.T) {
 	d := initTestDao()
+	defer closeTestDao(d)
 	name := "u"
 	infos, err := d.FindUserInfosLikeName(name)
 	if err != nil {

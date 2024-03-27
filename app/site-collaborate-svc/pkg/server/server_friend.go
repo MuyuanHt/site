@@ -4,15 +4,9 @@ import (
 	"context"
 	"net/http"
 	"site/app/site-collaborate-svc/pkg/models"
-	"site/app/site-collaborate-svc/pkg/service"
 	"site/protocol/collaborate"
 	"site/protocol/shared"
 )
-
-type CollaborateServer struct {
-	FriendSvc service.FriendService
-	collaborate.UnimplementedCollaborateServiceServer
-}
 
 // AddFriend 添加好友
 func (s *CollaborateServer) AddFriend(ctx context.Context, req *collaborate.AddFriendReq) (*collaborate.AddFriendResp, error) {

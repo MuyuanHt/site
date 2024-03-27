@@ -45,12 +45,12 @@ func (c *UserServiceClient) UpdateUserFriendNum(uid1 int64, uid2 int64, delFlag 
 
 // UpdateUserRelation 修改用户关系信息 opt 为操作选项 add 标记是增加还是减少
 // TODO: 删除好友或退出群聊之前先判断是否置顶，拉黑之前在前面判断的基础上判断是否是好友或是否在群聊中
-func (c *UserServiceClient) UpdateUserRelation(uid int64, opt int, add bool) (*pb.UpdateUserRelationResp, error) {
+func (c *UserServiceClient) UpdateUserRelation(uid int64, opt int, isAdd bool) (*pb.UpdateUserRelationResp, error) {
 	req := &pb.UpdateUserRelationReq{
 		Uid: uid,
 	}
 	var num int32
-	if add {
+	if isAdd {
 		num = 1
 	} else {
 		num = -1

@@ -60,7 +60,7 @@ func (s *UserService) CreateOneUser(accountType int32, account string, password 
 	if err == nil || result != nil {
 		return result, errors.New(shared.CodeMessageIgnoreCode(shared.UserExists))
 	}
-	// TODO: 生成uid, 默认头像
+	// TODO: 生成uid 默认头像 二维码
 	icon, err := conf.GetConfigParam("defaultIconUrl")
 	if err != nil {
 		return nil, errors.New(shared.CodeMessageIgnoreCode(shared.CreateUserError))
@@ -81,7 +81,7 @@ func (s *UserService) CreateOneUser(accountType int32, account string, password 
 		},
 		UserRelation: models.UserRelation{
 			SearchLimit: shared.SearchLimitY,
-			VisitLimit:  shared.VisitLimitN,
+			VisitLimit:  shared.VisitLimitY,
 			AddLimit:    shared.AddLimitAgree,
 		},
 	}

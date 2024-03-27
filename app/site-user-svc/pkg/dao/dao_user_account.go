@@ -101,12 +101,22 @@ func (d *Dao) UpdatePasswordByUid(uid int64, password string) error {
 	if err != nil {
 		return err
 	}
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err = tx.Error; err != nil {
+		return err
+	}
 	a.Password = password
-	result := d.DB.Save(a)
+	result := tx.Save(a)
 	if result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
-	return nil
+	return tx.Commit().Error
 }
 
 // UpdateEmailById 修改邮箱
@@ -115,15 +125,26 @@ func (d *Dao) UpdateEmailById(id int64, email string) error {
 	if err != nil {
 		return err
 	}
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err = tx.Error; err != nil {
+		return err
+	}
 	a.Email = email
 	result := d.DB.Save(a)
 	if result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
-	return nil
+	return tx.Commit().Error
 }
 
 // UnsubscribeById 注销账号 用 id
+// TODO: 需要处理关联数据
 func (d *Dao) UnsubscribeById(id int64) error {
 	a, err := d.FindOneAccountById(id)
 	if err != nil {

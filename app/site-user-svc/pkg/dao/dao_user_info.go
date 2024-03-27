@@ -51,6 +51,15 @@ func (d *Dao) UpdateUserInfo(id int64, user *models.UserInfo) error {
 	if err != nil {
 		return err
 	}
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err = tx.Error; err != nil {
+		return err
+	}
 	info.Username = user.Username
 	info.Age = user.Age
 	info.Gender = user.Gender
@@ -60,11 +69,12 @@ func (d *Dao) UpdateUserInfo(id int64, user *models.UserInfo) error {
 	info.QRCode = user.QRCode
 	info.Birthday = user.Birthday
 	info.LastLoginTime = user.LastLoginTime
-	result := d.DB.Save(info)
+	result := tx.Save(info)
 	if result.Error != nil {
+		tx.Rollback()
 		return result.Error
 	}
-	return nil
+	return tx.Commit().Error
 }
 
 // FindUserInfosLikeName 通过用户名模糊查询对应 id

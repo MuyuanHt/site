@@ -111,11 +111,24 @@ func (d *Dao) UpdateFriendInfo(friend *models.UserFriend) error {
 	if err != nil {
 		return err
 	}
+	tx := d.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+	if err = tx.Error; err != nil {
+		return err
+	}
 	f.IsTop = friend.IsTop
 	f.IsBlack = friend.IsBlack
 	f.Label = friend.Label
-	result := d.DB.Save(f)
-	return result.Error
+	result := tx.Save(f)
+	if result.Error != nil {
+		tx.Rollback()
+		return result.Error
+	}
+	return tx.Commit().Error
 }
 
 // FindUserAllFriends 查找用户所有好友 opt 选择查询条件 是否置顶/拉黑
